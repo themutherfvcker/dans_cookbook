@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  email        String?  @unique
+  stripeId     String?  @unique
+  credits      Int      @default(25)   // free trial credits to start
+  plan         String   @default("free")
+  ghlContactId String?  @unique        // (optional) for GHL linking later
+  jobs         GenerationJob[]
+  ledgers      CreditLedger[]
+}
+
+model GenerationJob {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  prompt    String
+  mode      String   // 'text' | 'edit'
+  latencyMs Int
+  success   Boolean  @default(true)
+}
+
+model CreditLedger {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  delta     Int      // + on purchase, -1 per successful generation
+  reason    String   // e.g., 'purchase:starter' | 'generation'
+  ref       String?  // e.g., stripe session id or job id
+}
+
