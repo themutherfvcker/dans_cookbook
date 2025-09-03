@@ -1,4 +1,3 @@
-// app/api/genai-check/route.ts
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
@@ -10,15 +9,13 @@ export async function GET() {
     if (!apiKey) {
       return NextResponse.json({ ok: false, error: 'GOOGLE_API_KEY missing' }, { status: 500 });
     }
-
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-
     const result = await model.generateContent('Say: hello from Gemini');
     const text = result.response.text();
-
     return NextResponse.json({ ok: true, text });
-  } catch (err: any) {
-    return NextResponse.json({ ok: false, error: String(err?.message || err) }, { status: 500 });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ ok: false, error: message }, { status: 500 });
   }
 }
