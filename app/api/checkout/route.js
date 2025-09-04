@@ -1,13 +1,13 @@
-// app/api/checkout/route.ts
+// app/api/checkout/route.js
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: Request) {
+export async function GET(request) {
   try {
-    // Load Stripe at runtime (prevents build-time bundling issues)
+    // Load Stripe at runtime
     const { default: Stripe } = await import('stripe');
     const secret = process.env.STRIPE_SECRET_KEY;
     if (!secret) {
@@ -54,7 +54,7 @@ export async function GET(request: Request) {
     });
 
     return NextResponse.json({ ok: true, url: session.url });
-  } catch (err: unknown) {
+  } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ ok: false, error: message }, { status: 500 });
   }
