@@ -1,29 +1,31 @@
 // app/api/checkout/route.ts
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import Stripe from 'stripe';
 
 export const runtime = 'nodejs';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: '2024-06-20',
-});
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
   try {
-    // Read credits from query (?credits=100)
+    // Load Stripe at runtime (prevents build-time bundling issues)
+    const { default: Stripe } = await import('stripe');
+    const secret = process.env.STRIPE_SECRET_KEY;
+    if (!secret) {
+      return NextResponse.json({ ok: false, error: 'STRIPE_SECRET_KEY missing' }, { status: 500 });
+    }
+    const stripe = new Stripe(secret, { apiVersion: '2024-06-20' });
+
+    // Credits from query (?credits=100)
     const url = new URL(request.url);
     const credits = parseInt(url.searchParams.get('credits') ?? '100', 10);
+    const amountAudCents = Math.max(1, Math.round((credits / 100) * 500)); // 100 credits -> $5.00 AUD
 
-    // Simple demo pricing: 100 credits = AUD $5.00
-    const amountAudCents = Math.max(1, Math.round((credits / 100) * 500));
-
-    // Determine origin for success/cancel URLs
+    // Origin for redirects
     const origin =
       request.headers.get('origin') ||
       (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
 
-    // Ensure the user has a uid cookie (create one if missing by calling /api/session first)
+    // Require session cookie
     const jar = await cookies();
     const uid = jar.get('uid')?.value;
     if (!uid) {
@@ -47,12 +49,8 @@ export async function GET(request: Request) {
           quantity: 1,
         },
       ],
-      // attach identifiers so the webhook knows who to credit
-      client_reference_id: uid, // also stored by Stripe
-      metadata: {
-        credits: String(credits),
-        userId: uid,
-      },
+      client_reference_id: uid,
+      metadata: { credits: String(credits), userId: uid },
     });
 
     return NextResponse.json({ ok: true, url: session.url });
