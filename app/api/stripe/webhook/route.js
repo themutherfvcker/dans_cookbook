@@ -1,58 +1,67 @@
 // app/api/stripe/webhook/route.js
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
 import Stripe from 'stripe';
+import { prisma } from '@/lib/db';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY); // use default API version
-
 export async function POST(request) {
-  const sig = request.headers.get('stripe-signature');
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
-  if (!sig || !secret) {
-    return new NextResponse('Missing Stripe signature or webhook secret', { status: 400 });
+  const key = process.env.STRIPE_SECRET_KEY;
+
+  if (!secret || !key) {
+    return NextResponse.json(
+      { ok: false, error: 'Missing STRIPE_WEBHOOK_SECRET or STRIPE_SECRET_KEY' },
+      { status: 500 }
+    );
   }
 
   // Read raw body for signature verification
-  const body = await request.text();
+  const payload = await request.text();
+  const sig = request.headers.get('stripe-signature') || '';
 
   let event;
   try {
-    event = stripe.webhooks.constructEvent(body, sig, secret);
+    // No apiVersion here (avoids build-time type/union issues)
+    const stripe = new Stripe(key);
+    event = stripe.webhooks.constructEvent(payload, sig, secret);
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    return new NextResponse(`Webhook Error: ${message}`, { status: 400 });
+    const msg = err instanceof Error ? err.message : String(err);
+    return NextResponse.json(
+      { ok: false, error: `Signature verification failed: ${msg}` },
+      { status: 400 }
+    );
   }
 
   try {
     if (event.type === 'checkout.session.completed') {
-      const session = event.data.object;
-      const credits = parseInt(session.metadata?.credits ?? '0', 10) || 0;
-      const userId = session.metadata?.userId ?? session.client_reference_id ?? '';
+      const session = event.data.object; // Stripe.Checkout.Session
+      const uid = session?.metadata?.uid;
+      const credits = Number(session?.metadata?.credits || '0') || 0;
 
-      if (credits > 0 && userId) {
-        await prisma.$transaction([
-          prisma.creditLedger.create({
+      if (uid && credits > 0) {
+        await prisma.$transaction(async (tx) => {
+          await tx.user.update({
+            where: { id: uid },
+            data: { credits: { increment: credits } },
+          });
+
+          await tx.creditLedger.create({
             data: {
-              userId,
+              userId: uid,
               delta: credits,
               reason: 'purchase:checkout',
-              ref: session.id ?? undefined,
+              ref: session.id ?? null,
             },
-          }),
-          prisma.user.update({
-            where: { id: userId },
-            data: { credits: { increment: credits } },
-          }),
-        ]);
+          });
+        });
       }
     }
-
-    return NextResponse.json({ received: true });
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    return new NextResponse(`Webhook handler error: ${message}`, { status: 500 });
+    // Log but return 200 so Stripe doesn't keep retrying
+    console.error('Webhook handler error:', err);
   }
+
+  return new NextResponse(null, { status: 200 });
 }
