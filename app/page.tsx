@@ -10,8 +10,8 @@ type CheckoutResp =
   | { ok: true; url: string }
   | { ok: false; error: string };
 
-type UseResp =
-  | { ok: true; credits: number }
+type GenerateResp =
+  | { ok: true; imageUrl: string; credits: number }
   | { ok: false; error: string };
 
 export default function Home() {
@@ -19,6 +19,7 @@ export default function Home() {
   const [loadingCheckout, setLoadingCheckout] = useState(false);
   const [loadingUse, setLoadingUse] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   async function loadSession() {
     try {
@@ -53,22 +54,28 @@ export default function Home() {
     }
   }
 
-  async function useOneCredit() {
+  async function generateOne() {
     try {
+      const prompt = window.prompt(
+        'Describe your image',
+        'a happy banana surfing a wave, bright colors'
+      );
+      if (prompt == null) return;
       setLoadingUse(true);
-      const res = await fetch('/api/credits/use', {
+
+      const res = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ amount: 1 }),
+        body: JSON.stringify({ prompt }),
       });
-      const data = (await res.json()) as UseResp;
+      const data = (await res.json()) as GenerateResp;
 
-      if ('credits' in data) {
+      if (data.ok) {
         setCredits(data.credits);
-        setMsg('Used 1 credit.');
+        setImageUrl(data.imageUrl);
+        setMsg('Generated 1 image (used 1 credit).');
       } else {
-        // 402 from API means not enough credits
-        alert(data.error || 'Unable to use credit.');
+        alert(data.error || 'Generation failed.');
       }
     } finally {
       setLoadingUse(false);
@@ -79,8 +86,6 @@ export default function Home() {
     setMsg(null);
     await loadSession();
   }
-
-  const canUse = (credits ?? 0) > 0;
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
@@ -106,6 +111,12 @@ export default function Home() {
           </div>
         )}
 
+        {imageUrl && (
+          <div className="rounded-lg overflow-hidden border">
+            <img src={imageUrl} alt="Generated" className="w-full h-auto" />
+          </div>
+        )}
+
         <div className="grid grid-cols-1 gap-3">
           <button
             onClick={() => startCheckout(100)}
@@ -116,12 +127,12 @@ export default function Home() {
           </button>
 
           <button
-            onClick={useOneCredit}
-            disabled={!canUse || loadingUse}
+            onClick={generateOne}
+            disabled={loadingUse || (credits ?? 0) < 1}
             className="w-full rounded-lg bg-black/90 hover:bg-black text-white font-semibold py-3 disabled:opacity-50"
-            title={!canUse ? 'No credits left' : 'Use 1 credit'}
+            title={(credits ?? 0) < 1 ? 'No credits left' : 'Use 1 credit'}
           >
-            {loadingUse ? 'Using credit…' : 'Generate (uses 1 credit)'}
+            {loadingUse ? 'Generating…' : 'Generate (uses 1 credit)'}
           </button>
         </div>
 
