@@ -10,9 +10,14 @@ type CheckoutResp =
   | { ok: true; url: string }
   | { ok: false; error: string };
 
+type UseResp =
+  | { ok: true; credits: number }
+  | { ok: false; error: string };
+
 export default function Home() {
   const [credits, setCredits] = useState<number | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loadingCheckout, setLoadingCheckout] = useState(false);
+  const [loadingUse, setLoadingUse] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
 
   async function loadSession() {
@@ -24,10 +29,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    // ensure user exists + show credits
     loadSession();
-
-    // if we just returned from Stripe, show a friendly message
     const p = new URLSearchParams(window.location.search);
     if (p.get('success') === '1') setMsg('Payment successful! Credits added.');
     if (p.get('canceled') === '1') setMsg('Payment canceled.');
@@ -35,23 +37,41 @@ export default function Home() {
 
   async function startCheckout(creditsToBuy = 100) {
     try {
-      setLoading(true);
-      // ensure uid cookie exists
+      setLoadingCheckout(true);
       await fetch('/api/session', { cache: 'no-store' });
       const res = await fetch(`/api/checkout?credits=${creditsToBuy}`, {
         cache: 'no-store',
       });
       const data = (await res.json()) as CheckoutResp;
-
       if (data.ok) {
-        // ok:true branch has url
         window.location.href = data.url;
       } else {
-        // ok:false branch has error
         alert(data.error ?? 'Checkout failed.');
       }
     } finally {
-      setLoading(false);
+      setLoadingCheckout(false);
+    }
+  }
+
+  async function useOneCredit() {
+    try {
+      setLoadingUse(true);
+      const res = await fetch('/api/credits/use', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ amount: 1 }),
+      });
+      const data = (await res.json()) as UseResp;
+
+      if ('credits' in data) {
+        setCredits(data.credits);
+        setMsg('Used 1 credit.');
+      } else {
+        // 402 from API means not enough credits
+        alert(data.error || 'Unable to use credit.');
+      }
+    } finally {
+      setLoadingUse(false);
     }
   }
 
@@ -59,6 +79,8 @@ export default function Home() {
     setMsg(null);
     await loadSession();
   }
+
+  const canUse = (credits ?? 0) > 0;
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
@@ -84,16 +106,27 @@ export default function Home() {
           </div>
         )}
 
-        <button
-          onClick={() => startCheckout(100)}
-          disabled={loading}
-          className="w-full rounded-lg bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold py-3 disabled:opacity-50"
-        >
-          {loading ? 'Opening Checkout…' : 'Buy 100 credits ($5 AUD)'}
-        </button>
+        <div className="grid grid-cols-1 gap-3">
+          <button
+            onClick={() => startCheckout(100)}
+            disabled={loadingCheckout}
+            className="w-full rounded-lg bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold py-3 disabled:opacity-50"
+          >
+            {loadingCheckout ? 'Opening Checkout…' : 'Buy 100 credits ($5 AUD)'}
+          </button>
+
+          <button
+            onClick={useOneCredit}
+            disabled={!canUse || loadingUse}
+            className="w-full rounded-lg bg-black/90 hover:bg-black text-white font-semibold py-3 disabled:opacity-50"
+            title={!canUse ? 'No credits left' : 'Use 1 credit'}
+          >
+            {loadingUse ? 'Using credit…' : 'Generate (uses 1 credit)'}
+          </button>
+        </div>
 
         <div className="text-xs text-gray-500">
-          Test mode: use Stripe card <code>4242 4242 4242 4242</code>, any future
+          Test mode: Stripe card <code>4242 4242 4242 4242</code>, any future
           expiry, any CVC.
         </div>
 
