@@ -20,9 +20,7 @@ export default function Home() {
       const res = await fetch('/api/session', { cache: 'no-store' });
       const data = (await res.json()) as SessionResp;
       if ('credits' in data) setCredits(data.credits);
-    } catch (e) {
-      // ignore for now
-    }
+    } catch {}
   }
 
   useEffect(() => {
@@ -44,10 +42,13 @@ export default function Home() {
         cache: 'no-store',
       });
       const data = (await res.json()) as CheckoutResp;
-      if (data.ok && data.url) {
-        window.location.href = data.url; // go to Stripe Checkout
+
+      if (data.ok) {
+        // ok:true branch has url
+        window.location.href = data.url;
       } else {
-        alert(data?.error || 'Checkout failed.');
+        // ok:false branch has error
+        alert(data.error ?? 'Checkout failed.');
       }
     } finally {
       setLoading(false);
