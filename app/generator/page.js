@@ -14,9 +14,9 @@ export default function GeneratorPage() {
   const [history, setHistory] = useState([]) // [{url, at, prompt}]
   const [dragActive, setDragActive] = useState(false)
 
+  const [previewUrl, setPreviewUrl] = useState(null) // <-- FIX: avoid empty src
   const fileInputRef = useRef(null)
   const dropRef = useRef(null)
-  const previewRef = useRef(null)
 
   // --- Tailwind / libs (like homepage approach) ---
   useEffect(() => {
@@ -44,6 +44,11 @@ export default function GeneratorPage() {
       } catch {}
     })()
   }, [])
+
+  // Cleanup object URLs when preview changes or unmounts
+  useEffect(() => {
+    return () => { if (previewUrl) URL.revokeObjectURL(previewUrl) }
+  }, [previewUrl])
 
   // --- Helpers: image compression to dataURL (JSON-safe) ---
   async function fileToDataUrlCompressed(file, maxDim = 1536, jpegQuality = 0.9) {
@@ -80,17 +85,15 @@ export default function GeneratorPage() {
   }
 
   function setPreviewFile(file) {
-    if (!previewRef.current) return
+    // Revoke previous to avoid leaks
+    if (previewUrl) URL.revokeObjectURL(previewUrl)
     const url = URL.createObjectURL(file)
-    previewRef.current.src = url
-    previewRef.current.dataset.filename = file.name || "upload"
+    setPreviewUrl(url)
   }
 
   function clearPreview() {
-    if (previewRef.current) {
-      previewRef.current.src = ""
-      previewRef.current.removeAttribute("data-filename")
-    }
+    if (previewUrl) URL.revokeObjectURL(previewUrl)
+    setPreviewUrl(null)
     if (fileInputRef.current) fileInputRef.current.value = ""
   }
 
@@ -123,7 +126,7 @@ export default function GeneratorPage() {
       el.removeEventListener("dragleave", onDrag)
       el.removeEventListener("drop", onDrop)
     }
-  }, [])
+  }, [previewUrl])
 
   // --- Generate handler ---
   async function onGenerate() {
@@ -209,13 +212,14 @@ export default function GeneratorPage() {
               >
                 <label htmlFor="file-input" className="cursor-pointer block">
                   <div className="px-6 py-6 text-center">
-                    <img
-                      ref={previewRef}
-                      src=""
-                      alt=""
-                      className="mx-auto max-h-48 rounded-md border hidden"
-                      onLoad={(e) => { e.currentTarget.classList.remove("hidden") }}
-                    />
+                    {/* Only render when we have a value */}
+                    {previewUrl ? (
+                      <img
+                        src={previewUrl}
+                        alt="Preview"
+                        className="mx-auto max-h-48 rounded-md border"
+                      />
+                    ) : null}
                     <div className="text-sm text-gray-600 mt-2">
                       <span className="font-medium text-yellow-700 hover:text-yellow-800">Click to upload</span> or drag and drop
                     </div>
