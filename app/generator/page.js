@@ -5,16 +5,39 @@ import { useEffect, useRef, useState } from "react"
 import Script from "next/script"
 import Link from "next/link"
 
+const STYLE_CHIPS = [
+  { label: "Photorealistic", text: "ultra realistic, natural lighting, 50mm lens, high detail" },
+  { label: "Cinematic", text: "cinematic lighting, volumetric, dramatic shadows, 35mm film look" },
+  { label: "Studio Portrait", text: "studio portrait, softbox lighting, sharp eyes, skin texture" },
+  { label: "Fashion Editorial", text: "editorial fashion, clean backdrop, professional styling" },
+  { label: "Moody", text: "moody, low-key lighting, high contrast, grain" },
+  { label: "Vibrant", text: "vibrant colors, crisp detail, punchy contrast" },
+]
+
+const ASPECTS = [
+  { k: "1:1",  w: 1024, h: 1024 },
+  { k: "3:4",  w: 960,  h: 1280 },
+  { k: "4:3",  w: 1280, h: 960  },
+  { k: "16:9", w: 1536, h: 864  },
+  { k: "9:16", w: 864,  h: 1536 },
+]
+
 export default function GeneratorPage() {
   const [balance, setBalance] = useState(null)
+  const [activeTab, setActiveTab] = useState("text") // "text" | "image"
+
+  // Generation inputs
   const [prompt, setPrompt] = useState("a cinematic banana astronaut on the moon, 35mm film look")
+  const [aspect, setAspect] = useState("1:1")
+  const [strength, setStrength] = useState(0.6) // only for image→image
+
+  // UI state
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState("")
   const [resultUrl, setResultUrl] = useState("")
-  const [history, setHistory] = useState([]) // [{url, at, prompt, mode}]
-  const [activeTab, setActiveTab] = useState("text") // "text" | "image"
+  const [history, setHistory] = useState([]) // [{url, at, prompt, mode, aspect}]
 
-  // image→image UI state
+  // Upload state (image→image)
   const [previewUrl, setPreviewUrl] = useState(null)
   const [dragActive, setDragActive] = useState(false)
   const fileInputRef = useRef(null)
@@ -30,12 +53,11 @@ export default function GeneratorPage() {
       document.head.appendChild(link)
     }
   }, [])
-
   useEffect(() => {
     if (window.AOS) window.AOS.init({ duration: 600, easing: "ease-out", once: true })
   }, [resultUrl, history, activeTab])
 
-  // --- Fetch credit balance on mount ---
+  // Credits
   useEffect(() => {
     ;(async () => {
       try {
@@ -46,12 +68,10 @@ export default function GeneratorPage() {
     })()
   }, [])
 
-  // Cleanup object URLs when preview changes or unmounts
-  useEffect(() => {
-    return () => { if (previewUrl) URL.revokeObjectURL(previewUrl) }
-  }, [previewUrl])
+  // Cleanup preview URL
+  useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl) }, [previewUrl])
 
-  // --- Helpers: image compression to dataURL (JSON-safe) ---
+  // Compression helper (JSON-safe)
   async function fileToDataUrlCompressed(file, maxDim = 1536, jpegQuality = 0.9) {
     const okTypes = ["image/jpeg", "image/png", "image/webp"]
     if (!okTypes.includes(file.type)) throw new Error("Please upload PNG, JPG, or WEBP.")
@@ -66,7 +86,10 @@ export default function GeneratorPage() {
     })
     const w = img.naturalWidth || img.width
     const h = img.naturalHeight || img.height
-    const scale = Math.min(1, maxDim / Math.max(w, h))
+    const target = ASPECTS.find(a => a.k === aspect) || ASPECTS[0]
+    // Scale to fit within target max dimension, but we don't hard-crop client-side
+    const maxTarget = Math.max(target.w, target.h)
+    const scale = Math.min(1, maxTarget / Math.max(w, h))
     const outW = Math.max(1, Math.round(w * scale))
     const outH = Math.max(1, Math.round(h * scale))
 
@@ -90,32 +113,25 @@ export default function GeneratorPage() {
     const url = URL.createObjectURL(file)
     setPreviewUrl(url)
   }
-
   function clearPreview() {
     if (previewUrl) URL.revokeObjectURL(previewUrl)
     setPreviewUrl(null)
     if (fileInputRef.current) fileInputRef.current.value = ""
   }
 
-  // --- Drag & drop (only active on Image→Image tab) ---
+  // Drag & drop (only when image tab is active)
   useEffect(() => {
     if (activeTab !== "image") return
     const el = dropRef.current
     if (!el) return
     const onDrag = (e) => {
-      e.preventDefault()
-      e.stopPropagation()
+      e.preventDefault(); e.stopPropagation()
       if (e.type === "dragenter" || e.type === "dragover") setDragActive(true)
       else if (e.type === "dragleave") setDragActive(false)
     }
     const onDrop = (e) => {
-      e.preventDefault()
-      e.stopPropagation()
-      setDragActive(false)
-      const f = e.dataTransfer?.files?.[0]
-      if (f) {
-        try { setPreviewFile(f) } catch {}
-      }
+      e.preventDefault(); e.stopPropagation(); setDragActive(false)
+      const f = e.dataTransfer?.files?.[0]; if (f) setPreviewFile(f)
     }
     el.addEventListener("dragenter", onDrag)
     el.addEventListener("dragover", onDrag)
@@ -129,12 +145,22 @@ export default function GeneratorPage() {
     }
   }, [activeTab, previewUrl])
 
-  // --- Generate handler (routes by tab) ---
+  function applyChip(chipText) {
+    // Simple behavior: replace the prompt if it's empty or default; otherwise append
+    if (!prompt || prompt === "a cinematic banana astronaut on the moon, 35mm film look") {
+      setPrompt(chipText)
+    } else {
+      setPrompt(prev => `${prev.trim().replace(/\.$/, "")}. ${chipText}`)
+    }
+  }
+
+  // Generate
   async function onGenerate() {
     setBusy(true)
     setError("")
     setResultUrl("")
     try {
+      const meta = { aspect, strength } // back end may ignore; safe to send
       let resp
       if (activeTab === "image") {
         const file = fileInputRef.current?.files?.[0] || null
@@ -143,28 +169,28 @@ export default function GeneratorPage() {
         resp = await fetch("/api/vertex/edit", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt: prompt.trim(), imageDataUrl }),
+          body: JSON.stringify({ prompt: prompt.trim(), imageDataUrl, meta }),
         })
       } else {
         resp = await fetch("/api/vertex/imagine", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt: prompt.trim() }),
+          body: JSON.stringify({ prompt: prompt.trim(), meta }),
         })
       }
       const j = await resp.json()
-      if (!resp.ok || !j?.ok) {
-        throw new Error(j?.error || `HTTP ${resp.status}`)
-      }
+      if (!resp.ok || !j?.ok) throw new Error(j?.error || `HTTP ${resp.status}`)
       setResultUrl(j.dataUrl || "")
       setBalance(typeof j.balance === "number" ? j.balance : balance)
-      setHistory((h) => [{ url: j.dataUrl, at: Date.now(), prompt, mode: activeTab }, ...h].slice(0, 30))
+      setHistory((h) => [{ url: j.dataUrl, at: Date.now(), prompt, mode: activeTab, aspect }, ...h].slice(0, 40))
     } catch (e) {
       setError(e?.message || "Generation failed")
     } finally {
       setBusy(false)
     }
   }
+
+  const aspectHelp = "Aspect ratio hint (client-side). Your API may ignore it unless implemented server-side."
 
   return (
     <>
@@ -174,7 +200,7 @@ export default function GeneratorPage() {
 
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
-        <header className="border-b bg-white">
+        <header className="border-b bg-white sticky top-0 z-40">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <img className="h-8 w-auto" src="/banana-decoration.png" alt="Nano Banana" />
@@ -183,7 +209,7 @@ export default function GeneratorPage() {
               <span className="text-gray-600">Generator</span>
             </div>
             <div className="flex items-center gap-4">
-              <a href="/pricing" className="text-sm text-gray-700 hover:text-gray-900">Pricing</a>
+              <Link href="/pricing" className="text-sm text-gray-700 hover:text-gray-900">Pricing</Link>
               <div className="text-sm bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">
                 Credits: {balance ?? "—"}
               </div>
@@ -193,7 +219,7 @@ export default function GeneratorPage() {
 
         {/* Main */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left sidebar: tabs, upload (if image), prompt */}
+          {/* Left: controls */}
           <section className="lg:col-span-4">
             <div className="bg-white shadow-sm rounded-lg p-4 sm:p-6 space-y-5">
               {/* Tabs */}
@@ -212,7 +238,66 @@ export default function GeneratorPage() {
                 </button>
               </div>
 
-              {/* Upload (only for Image→Image) */}
+              {/* Quick styles */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-semibold text-gray-900">Styles</h3>
+                  <button
+                    className="text-xs text-gray-500 hover:text-gray-700"
+                    onClick={() => setPrompt("")}
+                  >
+                    Clear prompt
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {STYLE_CHIPS.map((c) => (
+                    <button
+                      key={c.label}
+                      type="button"
+                      className="px-3 py-1.5 rounded-full text-xs font-medium border hover:bg-gray-50"
+                      onClick={() => applyChip(c.text)}
+                      title={c.text}
+                    >
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Aspect + strength */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Aspect Ratio
+                  </label>
+                  <select
+                    value={aspect}
+                    onChange={(e) => setAspect(e.target.value)}
+                    className="mt-1 w-full rounded-md border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
+                    title={aspectHelp}
+                  >
+                    {ASPECTS.map((a) => (
+                      <option key={a.k} value={a.k}>{a.k}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Edit Strength {activeTab === "image" ? `(${strength.toFixed(2)})` : ""}
+                  </label>
+                  <input
+                    type="range"
+                    className="mt-2 w-full"
+                    min={0} max={1} step={0.05}
+                    disabled={activeTab !== "image"}
+                    value={strength}
+                    onChange={(e) => setStrength(parseFloat(e.target.value))}
+                    title="Lower = follow image more. Higher = follow prompt more."
+                  />
+                </div>
+              </div>
+
+              {/* Upload (image→image only) */}
               {activeTab === "image" && (
                 <div>
                   <div className="flex items-center justify-between">
@@ -253,9 +338,11 @@ export default function GeneratorPage() {
                 </div>
               )}
 
-              {/* Prompt for both modes */}
+              {/* Prompt */}
               <div>
-                <label htmlFor="prompt" className="block text-sm font-medium text-gray-700">Prompt</label>
+                <label htmlFor="prompt" className="block text-sm font-medium text-gray-700">
+                  Prompt
+                </label>
                 <textarea
                   id="prompt"
                   value={prompt}
@@ -271,21 +358,40 @@ export default function GeneratorPage() {
                 disabled={busy}
                 className="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 disabled:opacity-60"
               >
-                {busy ? "Generating…" : "Generate (−1 credit)"}
+                {busy ? "Generating…" : activeTab === "image" ? "Apply Edits (−1 credit)" : "Generate (−1 credit)"}
               </button>
 
               {error && <div className="text-sm text-red-600">{error}</div>}
 
               <p className="text-xs text-gray-500">
-                Mode: <strong>{activeTab === "image" ? "Image → Image (uploads required)" : "Text → Image (no upload)"}</strong>
+                Aspect & strength are hints. Your API can read them from <code>meta</code> if implemented.
               </p>
             </div>
           </section>
 
-          {/* Right: canvas/result */}
+          {/* Right: result & history */}
           <section className="lg:col-span-8 space-y-6">
             <div className="bg-white shadow-sm rounded-lg p-4 sm:p-6">
-              <h2 className="text-base font-semibold text-gray-900 mb-3">Result</h2>
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-base font-semibold text-gray-900">Result</h2>
+                {resultUrl && (
+                  <div className="flex gap-3">
+                    <a
+                      href={resultUrl}
+                      download="nanobanana.png"
+                      className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md bg-gray-900 text-white hover:bg-black"
+                    >
+                      Download PNG
+                    </a>
+                    <button
+                      className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md border border-gray-300 hover:bg-gray-50"
+                      onClick={() => setResultUrl("")}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                )}
+              </div>
 
               {!resultUrl && (
                 <div className="h-72 border rounded-md grid place-items-center text-gray-500">
@@ -306,21 +412,6 @@ export default function GeneratorPage() {
               {resultUrl && (
                 <div className="space-y-3" data-aos="fade-in">
                   <img src={resultUrl} alt="Result" className="w-full h-auto rounded-md border" />
-                  <div className="flex flex-wrap gap-3">
-                    <a
-                      href={resultUrl}
-                      download="nanobanana.png"
-                      className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md bg-gray-900 text-white hover:bg-black"
-                    >
-                      Download PNG
-                    </a>
-                    <button
-                      className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md border border-gray-300 hover:bg-gray-50"
-                      onClick={() => setResultUrl("")}
-                    >
-                      Clear
-                    </button>
-                  </div>
                 </div>
               )}
             </div>
@@ -347,11 +438,16 @@ export default function GeneratorPage() {
                       key={i}
                       className="group border rounded-md overflow-hidden text-left"
                       onClick={() => setResultUrl(h.url)}
-                      title={`${h.mode === "image" ? "Image→Image" : "Text→Image"}: ${h.prompt}`}
+                      title={`${h.mode === "image" ? "Image→Image" : "Text→Image"} • ${h.aspect} • ${h.prompt}`}
                     >
                       <img src={h.url} alt="" className="w-full h-32 object-cover group-hover:opacity-90" />
                       <div className="p-2 text-[11px] text-gray-600 line-clamp-2">
-                        <span className="mr-1 inline-block px-1.5 py-0.5 rounded bg-gray-100 text-gray-700">{h.mode === "image" ? "I→I" : "T→I"}</span>
+                        <span className="mr-1 inline-block px-1.5 py-0.5 rounded bg-gray-100 text-gray-700">
+                          {h.mode === "image" ? "I→I" : "T→I"}
+                        </span>
+                        <span className="mr-1 inline-block px-1.5 py-0.5 rounded bg-gray-100 text-gray-700">
+                          {h.aspect}
+                        </span>
                         {h.prompt}
                       </div>
                     </button>
