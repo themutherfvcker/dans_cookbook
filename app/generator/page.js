@@ -1,7 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 "use client"
 
 import { useEffect, useRef, useState } from "react"
 import Script from "next/script"
+import Link from "next/link"
 
 export default function GeneratorPage() {
   const [balance, setBalance] = useState(null)
@@ -70,7 +72,6 @@ export default function GeneratorPage() {
     const dataUrl = cvs.toDataURL("image/jpeg", jpegQuality)
     URL.revokeObjectURL(blobUrl)
 
-    // small guard for base64 (~33% overhead)
     const approxBytes = Math.ceil((dataUrl.length - "data:image/jpeg;base64,".length) * 3 / 4)
     if (approxBytes > 5 * 1024 * 1024) {
       throw new Error("Compressed image still too big. Try a smaller image.")
@@ -173,7 +174,7 @@ export default function GeneratorPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <img className="h-8 w-auto" src="/banana-decoration.png" alt="Nano Banana" />
-              <a href="/" className="text-lg font-semibold text-gray-900">Nano Banana</a>
+              <Link href="/" className="text-lg font-semibold text-gray-900">Nano Banana</Link>
               <span className="text-gray-300">/</span>
               <span className="text-gray-600">Generator</span>
             </div>
@@ -260,7 +261,7 @@ export default function GeneratorPage() {
                 </div>
               )}
               <p className="text-xs text-gray-500">
-                Tip: With an image uploaded, we’ll **edit** it using your prompt. Without an image, we’ll **generate** from text.
+                Tip: With an image uploaded, we’ll <strong>edit</strong> it using your prompt. Without an image, we’ll <strong>generate</strong> from text.
               </p>
             </div>
           </section>
