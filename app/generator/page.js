@@ -87,7 +87,6 @@ export default function GeneratorPage() {
     const w = img.naturalWidth || img.width
     const h = img.naturalHeight || img.height
     const target = ASPECTS.find(a => a.k === aspect) || ASPECTS[0]
-    // Scale to fit within target max dimension, but we don't hard-crop client-side
     const maxTarget = Math.max(target.w, target.h)
     const scale = Math.min(1, maxTarget / Math.max(w, h))
     const outW = Math.max(1, Math.round(w * scale))
@@ -146,11 +145,30 @@ export default function GeneratorPage() {
   }, [activeTab, previewUrl])
 
   function applyChip(chipText) {
-    // Simple behavior: replace the prompt if it's empty or default; otherwise append
     if (!prompt || prompt === "a cinematic banana astronaut on the moon, 35mm film look") {
       setPrompt(chipText)
     } else {
       setPrompt(prev => `${prev.trim().replace(/\.$/, "")}. ${chipText}`)
+    }
+  }
+
+  // ---- Robust JSON reader (fixes your error) ----
+  async function safeReadJson(resp) {
+    const raw = await resp.text(); // read once
+    if (!raw) {
+      // empty body — build a helpful message
+      if (!resp.ok) {
+        throw new Error(`HTTP ${resp.status} ${resp.statusText} (empty body)`)
+      }
+      // ok + empty is also unexpected here
+      throw new Error("Empty response from server")
+    }
+    try {
+      return JSON.parse(raw)
+    } catch {
+      // Non-JSON (often an HTML error page). Trim preview so it’s readable.
+      const preview = raw.slice(0, 300).replace(/\s+/g, " ")
+      throw new Error(`Non-JSON from server (status ${resp.status}). Preview: ${preview}`)
     }
   }
 
@@ -160,7 +178,9 @@ export default function GeneratorPage() {
     setError("")
     setResultUrl("")
     try {
-      const meta = { aspect, strength } // back end may ignore; safe to send
+      if (!prompt.trim()) throw new Error("Please enter a prompt.")
+
+      const meta = { aspect, strength }
       let resp
       if (activeTab === "image") {
         const file = fileInputRef.current?.files?.[0] || null
@@ -170,16 +190,21 @@ export default function GeneratorPage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ prompt: prompt.trim(), imageDataUrl, meta }),
+          cache: "no-store",
         })
       } else {
         resp = await fetch("/api/vertex/imagine", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ prompt: prompt.trim(), meta }),
+          cache: "no-store",
         })
       }
-      const j = await resp.json()
-      if (!resp.ok || !j?.ok) throw new Error(j?.error || `HTTP ${resp.status}`)
+
+      const j = await safeReadJson(resp)   // <--- use robust reader
+      if (!resp.ok || !j?.ok) {
+        throw new Error(j?.error || `HTTP ${resp.status}`)
+      }
       setResultUrl(j.dataUrl || "")
       setBalance(typeof j.balance === "number" ? j.balance : balance)
       setHistory((h) => [{ url: j.dataUrl, at: Date.now(), prompt, mode: activeTab, aspect }, ...h].slice(0, 40))
