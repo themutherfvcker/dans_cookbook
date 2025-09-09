@@ -11,16 +11,17 @@ export default function GeneratorPage() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState("")
   const [resultUrl, setResultUrl] = useState("")
-  const [history, setHistory] = useState([]) // [{url, at, prompt}]
-  const [dragActive, setDragActive] = useState(false)
+  const [history, setHistory] = useState([]) // [{url, at, prompt, mode}]
+  const [activeTab, setActiveTab] = useState("text") // "text" | "image"
 
-  const [previewUrl, setPreviewUrl] = useState(null) // <-- FIX: avoid empty src
+  // image→image UI state
+  const [previewUrl, setPreviewUrl] = useState(null)
+  const [dragActive, setDragActive] = useState(false)
   const fileInputRef = useRef(null)
   const dropRef = useRef(null)
 
-  // --- Tailwind / libs (like homepage approach) ---
+  // --- Tailwind / libs (CDN) ---
   useEffect(() => {
-    // Add AOS CSS once
     const AOS_HREF = "https://unpkg.com/aos@2.3.1/dist/aos.css"
     if (!document.querySelector(`link[href="${AOS_HREF}"]`)) {
       const link = document.createElement("link")
@@ -32,7 +33,7 @@ export default function GeneratorPage() {
 
   useEffect(() => {
     if (window.AOS) window.AOS.init({ duration: 600, easing: "ease-out", once: true })
-  }, [resultUrl, history])
+  }, [resultUrl, history, activeTab])
 
   // --- Fetch credit balance on mount ---
   useEffect(() => {
@@ -85,7 +86,6 @@ export default function GeneratorPage() {
   }
 
   function setPreviewFile(file) {
-    // Revoke previous to avoid leaks
     if (previewUrl) URL.revokeObjectURL(previewUrl)
     const url = URL.createObjectURL(file)
     setPreviewUrl(url)
@@ -97,8 +97,9 @@ export default function GeneratorPage() {
     if (fileInputRef.current) fileInputRef.current.value = ""
   }
 
-  // --- Drag & drop wiring ---
+  // --- Drag & drop (only active on Image→Image tab) ---
   useEffect(() => {
+    if (activeTab !== "image") return
     const el = dropRef.current
     if (!el) return
     const onDrag = (e) => {
@@ -126,18 +127,18 @@ export default function GeneratorPage() {
       el.removeEventListener("dragleave", onDrag)
       el.removeEventListener("drop", onDrop)
     }
-  }, [previewUrl])
+  }, [activeTab, previewUrl])
 
-  // --- Generate handler ---
+  // --- Generate handler (routes by tab) ---
   async function onGenerate() {
     setBusy(true)
     setError("")
     setResultUrl("")
     try {
-      const fileInput = fileInputRef.current
-      const file = fileInput?.files?.[0] || null
       let resp
-      if (file) {
+      if (activeTab === "image") {
+        const file = fileInputRef.current?.files?.[0] || null
+        if (!file) throw new Error("Please upload a reference image.")
         const imageDataUrl = await fileToDataUrlCompressed(file, 1536, 0.9)
         resp = await fetch("/api/vertex/edit", {
           method: "POST",
@@ -157,7 +158,7 @@ export default function GeneratorPage() {
       }
       setResultUrl(j.dataUrl || "")
       setBalance(typeof j.balance === "number" ? j.balance : balance)
-      setHistory((h) => [{ url: j.dataUrl, at: Date.now(), prompt }, ...h].slice(0, 30))
+      setHistory((h) => [{ url: j.dataUrl, at: Date.now(), prompt, mode: activeTab }, ...h].slice(0, 30))
     } catch (e) {
       setError(e?.message || "Generation failed")
     } finally {
@@ -192,53 +193,67 @@ export default function GeneratorPage() {
 
         {/* Main */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left sidebar: upload & prompt */}
+          {/* Left sidebar: tabs, upload (if image), prompt */}
           <section className="lg:col-span-4">
             <div className="bg-white shadow-sm rounded-lg p-4 sm:p-6 space-y-5">
-              <div className="flex items-center justify-between">
-                <h2 className="text-base font-semibold text-gray-900">Reference Image</h2>
+              {/* Tabs */}
+              <div className="flex rounded-lg overflow-hidden border">
                 <button
-                  className="text-xs text-gray-500 hover:text-gray-700"
-                  onClick={clearPreview}
-                >Clear</button>
+                  className={`flex-1 px-3 py-2 text-sm font-medium ${activeTab === "text" ? "bg-yellow-600 text-white" : "bg-white text-gray-700 hover:bg-gray-50"}`}
+                  onClick={() => setActiveTab("text")}
+                >
+                  Text → Image
+                </button>
+                <button
+                  className={`flex-1 px-3 py-2 text-sm font-medium ${activeTab === "image" ? "bg-yellow-600 text-white" : "bg-white text-gray-700 hover:bg-gray-50"}`}
+                  onClick={() => setActiveTab("image")}
+                >
+                  Image → Image
+                </button>
               </div>
 
-              <div
-                ref={dropRef}
-                className={[
-                  "rounded-md border-2 border-dashed",
-                  dragActive ? "border-yellow-500 bg-yellow-50" : "border-gray-300 bg-gray-50"
-                ].join(" ")}
-              >
-                <label htmlFor="file-input" className="cursor-pointer block">
-                  <div className="px-6 py-6 text-center">
-                    {/* Only render when we have a value */}
-                    {previewUrl ? (
-                      <img
-                        src={previewUrl}
-                        alt="Preview"
-                        className="mx-auto max-h-48 rounded-md border"
-                      />
-                    ) : null}
-                    <div className="text-sm text-gray-600 mt-2">
-                      <span className="font-medium text-yellow-700 hover:text-yellow-800">Click to upload</span> or drag and drop
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">PNG, JPG, WEBP up to ~10MB</p>
+              {/* Upload (only for Image→Image) */}
+              {activeTab === "image" && (
+                <div>
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-base font-semibold text-gray-900">Reference Image</h2>
+                    <button className="text-xs text-gray-500 hover:text-gray-700" onClick={clearPreview}>Clear</button>
                   </div>
-                </label>
-                <input
-                  id="file-input"
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/png,image/jpeg,image/webp"
-                  className="sr-only"
-                  onChange={(e) => {
-                    const f = e.target.files?.[0]
-                    if (f) setPreviewFile(f)
-                  }}
-                />
-              </div>
 
+                  <div
+                    ref={dropRef}
+                    className={[
+                      "rounded-md border-2 border-dashed",
+                      dragActive ? "border-yellow-500 bg-yellow-50" : "border-gray-300 bg-gray-50"
+                    ].join(" ")}
+                  >
+                    <label htmlFor="file-input" className="cursor-pointer block">
+                      <div className="px-6 py-6 text-center">
+                        {previewUrl ? (
+                          <img src={previewUrl} alt="Preview" className="mx-auto max-h-48 rounded-md border" />
+                        ) : null}
+                        <div className="text-sm text-gray-600 mt-2">
+                          <span className="font-medium text-yellow-700 hover:text-yellow-800">Click to upload</span> or drag and drop
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">PNG, JPG, WEBP up to ~10MB</p>
+                      </div>
+                    </label>
+                    <input
+                      id="file-input"
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp"
+                      className="sr-only"
+                      onChange={(e) => {
+                        const f = e.target.files?.[0]
+                        if (f) setPreviewFile(f)
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Prompt for both modes */}
               <div>
                 <label htmlFor="prompt" className="block text-sm font-medium text-gray-700">Prompt</label>
                 <textarea
@@ -247,7 +262,7 @@ export default function GeneratorPage() {
                   onChange={(e) => setPrompt(e.target.value)}
                   rows={5}
                   className="mt-1 w-full rounded-md border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
-                  placeholder="Describe your edit or generation…"
+                  placeholder={activeTab === "image" ? "Describe the edits you want to apply…" : "Describe the image you want to generate…"}
                 />
               </div>
 
@@ -259,13 +274,10 @@ export default function GeneratorPage() {
                 {busy ? "Generating…" : "Generate (−1 credit)"}
               </button>
 
-              {error && (
-                <div className="text-sm text-red-600">
-                  {error}
-                </div>
-              )}
+              {error && <div className="text-sm text-red-600">{error}</div>}
+
               <p className="text-xs text-gray-500">
-                Tip: With an image uploaded, we’ll <strong>edit</strong> it using your prompt. Without an image, we’ll <strong>generate</strong> from text.
+                Mode: <strong>{activeTab === "image" ? "Image → Image (uploads required)" : "Text → Image (no upload)"}</strong>
               </p>
             </div>
           </section>
@@ -335,10 +347,13 @@ export default function GeneratorPage() {
                       key={i}
                       className="group border rounded-md overflow-hidden text-left"
                       onClick={() => setResultUrl(h.url)}
-                      title={h.prompt}
+                      title={`${h.mode === "image" ? "Image→Image" : "Text→Image"}: ${h.prompt}`}
                     >
                       <img src={h.url} alt="" className="w-full h-32 object-cover group-hover:opacity-90" />
-                      <div className="p-2 text-xs text-gray-600 line-clamp-2">{h.prompt}</div>
+                      <div className="p-2 text-[11px] text-gray-600 line-clamp-2">
+                        <span className="mr-1 inline-block px-1.5 py-0.5 rounded bg-gray-100 text-gray-700">{h.mode === "image" ? "I→I" : "T→I"}</span>
+                        {h.prompt}
+                      </div>
                     </button>
                   ))}
                 </div>
