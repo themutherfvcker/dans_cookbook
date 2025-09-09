@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.nanobanana-ai.dev/sitemap.xml
