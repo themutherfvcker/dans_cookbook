@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 export const metadata = { title: "Payment Success — Nano Banana" }
 
 export default function SuccessPage() {
@@ -8,12 +10,12 @@ export default function SuccessPage() {
         <p className="mt-3 text-gray-700">
           Your credits will appear in a few seconds.
         </p>
-        <a
+        <Link
           href="/#generator"
           className="mt-6 inline-flex items-center px-4 py-3 rounded-lg text-white bg-yellow-600 hover:bg-yellow-700"
         >
           Start Generating
-        </a>
+        </Link>
       </div>
     </main>
   )

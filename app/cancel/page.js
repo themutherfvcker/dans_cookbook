@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 export const metadata = { title: "Payment Canceled — Nano Banana" }
 
 export default function CancelPage() {
@@ -9,18 +11,18 @@ export default function CancelPage() {
           No problem — you can retry anytime.
         </p>
         <div className="mt-6 flex gap-3 justify-center">
-          <a
+          <Link
             href="/pricing"
             className="inline-flex items-center px-4 py-3 rounded-lg text-gray-900 bg-gray-100 hover:bg-gray-200"
           >
             Back to Pricing
-          </a>
-          <a
+          </Link>
+          <Link
             href="/#generator"
             className="inline-flex items-center px-4 py-3 rounded-lg text-white bg-yellow-600 hover:bg-yellow-700"
           >
             Use Free Credits
-          </a>
+          </Link>
         </div>
       </div>
     </main>
