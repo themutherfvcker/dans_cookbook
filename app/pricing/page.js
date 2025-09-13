@@ -6,6 +6,30 @@ export default function PricingPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
+  async function onSubscribe() {
+    setLoading(true)
+    setError("")
+    try {
+      const r = await fetch("/api/subscription", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          success_url: `${location.origin}/success`,
+          cancel_url: `${location.origin}/cancel`,
+        }),
+      })
+      const j = await r.json()
+      if (!r.ok || !j?.url) {
+        throw new Error(j?.error || `HTTP ${r.status}`)
+      }
+      window.location.href = j.url
+    } catch (e) {
+      setError(e.message || "Checkout failed")
+    } finally {
+      setLoading(false)
+    }
+  }
+
   async function onBuy() {
     setLoading(true)
     setError("")
@@ -61,23 +85,22 @@ export default function PricingPage() {
 
           <div className="bg-white rounded-2xl shadow p-8 border">
             <h2 className="text-2xl font-bold">Pro</h2>
-            <p className="text-gray-500 mt-1">For creators and teams</p>
+            <p className="text-gray-500 mt-1">Monthly subscription for regular use</p>
             <div className="mt-6">
-              <div className="text-5xl font-extrabold">$19<span className="text-2xl align-top ml-1">AUD</span></div>
-              <div className="text-gray-500 mt-1">500 credits</div>
+              <div className="text-5xl font-extrabold">$5<span className="text-2xl align-top ml-1">/mo</span></div>
+              <div className="text-gray-500 mt-1">Unlimited access while active</div>
             </div>
             <ul className="mt-6 space-y-2 text-sm text-gray-700">
-              <li>• 1 credit per generate</li>
-              <li>• Priority queue</li>
-              <li>• Commercial usage</li>
+              <li>• Subscription billed monthly via Stripe</li>
+              <li>• Cancel anytime in Billing Portal</li>
+              <li>• Supports future pro-only features</li>
             </ul>
             <button
-              onClick={onBuy}
+              onClick={onSubscribe}
               disabled={loading}
-              className="mt-8 w-full inline-flex items-center justify-center px-4 py-3 rounded-lg text-gray-800 bg-gray-100 hover:bg-gray-200 disabled:opacity-60"
-              title="Wire a second Stripe price in /api/checkout if desired"
+              className="mt-8 w-full inline-flex items-center justify-center px-4 py-3 rounded-lg text-white bg-gray-900 hover:bg-black disabled:opacity-60"
             >
-              {loading ? "Redirecting…" : "Buy Pro (uses Starter price for now)"}
+              {loading ? "Redirecting…" : "Subscribe $5/mo"}
             </button>
           </div>
         </div>

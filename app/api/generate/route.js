@@ -22,25 +22,36 @@ export async function POST(request) {
 
     let newBalance = null;
 
-    // Atomically spend a credit + ledger it
-    await prisma.$transaction(async (tx) => {
-      const updated = await tx.user.updateMany({
-        where: { id: uid, credits: { gte: spend } },
-        data: { credits: { decrement: spend } },
-      });
+    // Check user's plan and either spend a credit or allow unlimited usage for subscription
+    const user = await prisma.user.findUnique({ where: { id: uid }, select: { credits: true, plan: true } });
+    if (!user) {
+      return NextResponse.json({ ok: false, error: 'USER_NOT_FOUND' }, { status: 400 });
+    }
 
-      if (updated.count === 0) throw new Error('INSUFFICIENT_CREDITS');
+    if (user.plan === 'pro-monthly') {
+      // Subscription active: allow usage without decrementing credits
+      newBalance = user.credits;
+    } else {
+      // Atomically spend a credit + ledger it
+      await prisma.$transaction(async (tx) => {
+        const updated = await tx.user.updateMany({
+          where: { id: uid, credits: { gte: spend } },
+          data: { credits: { decrement: spend } },
+        });
 
-      await tx.creditLedger.create({
-        data: { userId: uid, delta: -spend, reason: 'usage:generate', ref: undefined },
-      });
+        if (updated.count === 0) throw new Error('INSUFFICIENT_CREDITS');
 
-      const after = await tx.user.findUnique({
-        where: { id: uid },
-        select: { credits: true },
+        await tx.creditLedger.create({
+          data: { userId: uid, delta: -spend, reason: 'usage:generate', ref: undefined },
+        });
+
+        const after = await tx.user.findUnique({
+          where: { id: uid },
+          select: { credits: true },
+        });
+        newBalance = after?.credits ?? null;
       });
-      newBalance = after?.credits ?? null;
-    });
+    }
 
     // Demo image service (deterministic by seed). We'll swap this for a real model later.
     const seed = encodeURIComponent((prompt || 'banana').slice(0, 64));
