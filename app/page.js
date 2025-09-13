@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState } from "react"
 import Script from "next/script"
 
-// ---- Generator constants (from your /app/generator/page.js) ----
+// ---------- Generator constants (mirrors /app/generator/page.js) ----------
 const STYLE_CHIPS = [
   { label: "Photorealistic", text: "ultra realistic, natural lighting, 50mm lens, high detail" },
   { label: "Cinematic", text: "cinematic lighting, volumetric, dramatic shadows, 35mm film look" },
@@ -22,7 +22,7 @@ const ASPECTS = [
   { k: "9:16", w: 864,  h: 1536 },
 ]
 
-// ---- Inline Generator section used on the homepage ----
+// ---------- Inline Generator used on the homepage ----------
 function HomeGeneratorSection() {
   const [balance, setBalance] = useState(null)
   const [activeTab, setActiveTab] = useState("text") // "text" | "image"
@@ -44,7 +44,7 @@ function HomeGeneratorSection() {
   const fileInputRef = useRef(null)
   const dropRef = useRef(null)
 
-  // Load AOS CSS (via CDN) once
+  // AOS CSS (once)
   useEffect(() => {
     const AOS_HREF = "https://unpkg.com/aos@2.3.1/dist/aos.css"
     if (!document.querySelector(`link[href="${AOS_HREF}"]`)) {
@@ -55,9 +55,11 @@ function HomeGeneratorSection() {
     }
   }, [])
 
-  // Init AOS when things change
+  // AOS init (constant deps size)
   useEffect(() => {
-    if (window.AOS) window.AOS.init({ duration: 600, easing: "ease-out", once: true })
+    if (typeof window !== "undefined" && window.AOS) {
+      window.AOS.init({ duration: 600, easing: "ease-out", once: true })
+    }
   }, [resultUrl, history, activeTab])
 
   // Credits
@@ -71,8 +73,12 @@ function HomeGeneratorSection() {
     })()
   }, [])
 
-  // Clean up preview blob
-  useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl) }, [previewUrl])
+  // revoke blob on unmount/change (constant deps size)
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl)
+    }
+  }, [previewUrl])
 
   function setPreviewFile(file) {
     if (previewUrl) URL.revokeObjectURL(previewUrl)
@@ -85,9 +91,8 @@ function HomeGeneratorSection() {
     if (fileInputRef.current) fileInputRef.current.value = ""
   }
 
-  // Drag & drop
+  // Drag & drop (deps are constant length)
   useEffect(() => {
-    if (activeTab !== "image") return
     const el = dropRef.current
     if (!el) return
     const onDrag = (e) => {
@@ -99,17 +104,21 @@ function HomeGeneratorSection() {
       e.preventDefault(); e.stopPropagation(); setDragActive(false)
       const f = e.dataTransfer?.files?.[0]; if (f) setPreviewFile(f)
     }
-    el.addEventListener("dragenter", onDrag)
-    el.addEventListener("dragover", onDrag)
-    el.addEventListener("dragleave", onDrag)
-    el.addEventListener("drop", onDrop)
-    return () => {
-      el.removeEventListener("dragenter", onDrag)
-      el.removeEventListener("dragover", onDrag)
-      el.removeEventListener("dragleave", onDrag)
-      el.removeEventListener("drop", onDrop)
+
+    if (activeTab === "image") {
+      el.addEventListener("dragenter", onDrag)
+      el.addEventListener("dragover", onDrag)
+      el.addEventListener("dragleave", onDrag)
+      el.addEventListener("drop", onDrop)
     }
-  }, [activeTab, previewUrl])
+
+    return () => {
+      el.removeEventListener?.("dragenter", onDrag)
+      el.removeEventListener?.("dragover", onDrag)
+      el.removeEventListener?.("dragleave", onDrag)
+      el.removeEventListener?.("drop", onDrop)
+    }
+  }, [activeTab, previewUrl, setPreviewFile])
 
   function applyChip(chipText) {
     if (!prompt || prompt === "a cinematic banana astronaut on the moon, 35mm film look") {
@@ -119,7 +128,7 @@ function HomeGeneratorSection() {
     }
   }
 
-  // Convert file → compressed DataURL (keeps JSON simple)
+  // Compress upload → dataURL for JSON
   async function fileToDataUrlCompressed(file, _maxDim = 1536, jpegQuality = 0.9) {
     const okTypes = ["image/jpeg", "image/png", "image/webp"]
     if (!okTypes.includes(file.type)) throw new Error("Please upload PNG, JPG, or WEBP.")
@@ -149,13 +158,11 @@ function HomeGeneratorSection() {
     URL.revokeObjectURL(blobUrl)
 
     const approxBytes = Math.ceil((dataUrl.length - "data:image/jpeg;base64,".length) * 3 / 4)
-    if (approxBytes > 5 * 1024 * 1024) {
-      throw new Error("Compressed image still too big. Try a smaller image.")
-    }
+    if (approxBytes > 5 * 1024 * 1024) throw new Error("Compressed image still too big. Try a smaller image.")
     return dataUrl
   }
 
-  // Robust JSON reader (prevents “Unexpected end of JSON input”)
+  // Robust JSON read (avoids “Unexpected end of JSON input”)
   async function safeReadJson(resp) {
     const raw = await resp.text()
     if (!raw) {
@@ -222,7 +229,7 @@ function HomeGeneratorSection() {
             Try The AI Editor
           </p>
           <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-            Experience the power of nano-banana's natural language image editing. Credits:{" "}
+            Experience the power of nano-banana&apos;s natural language image editing. Credits:{" "}
             <span>{balance ?? "—"}</span>
           </p>
         </div>
@@ -344,9 +351,7 @@ function HomeGeneratorSection() {
 
               {/* Prompt */}
               <div>
-                <label htmlFor="prompt" className="block text-sm font-medium text-gray-700">
-                  Prompt
-                </label>
+                <label htmlFor="prompt" className="block text-sm font-medium text-gray-700">Prompt</label>
                 <textarea
                   id="prompt"
                   value={prompt}
@@ -368,7 +373,7 @@ function HomeGeneratorSection() {
               {error && <div className="text-sm text-red-600">{error}</div>}
 
               <p className="text-xs text-gray-500">
-                Aspect & strength are hints. Your API can read them from <code>meta</code> if implemented.
+                Aspect &amp; strength are hints. Your API can read them from <code>meta</code> if implemented.
               </p>
             </div>
           </div>
@@ -467,6 +472,7 @@ function HomeGeneratorSection() {
   )
 }
 
+// ---------- Home page shell (hero + sections) ----------
 export default function HomePage() {
   useEffect(() => {
     // Ensure AOS CSS present
@@ -478,7 +484,7 @@ export default function HomePage() {
       document.head.appendChild(link)
     }
 
-    // Init external libs when ready (needs THREE first)
+    // Init external libs (THREE → Vanta → AOS)
     const initLibs = () => {
       try {
         if (window.AOS) window.AOS.init({ duration: 800, easing: "ease-in-out", once: true })
@@ -511,7 +517,7 @@ export default function HomePage() {
 
     return () => {
       clearInterval(libTimer)
-      if (window._vanta && window._vanta.destroy) {
+      if (window._vanta?.destroy) {
         window._vanta.destroy()
         window._vanta = null
       }
@@ -522,7 +528,6 @@ export default function HomePage() {
     <>
       {/* Tailwind via CDN */}
       <Script src="https://cdn.tailwindcss.com" strategy="afterInteractive" />
-
       {/* THREE before Vanta */}
       <Script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" strategy="afterInteractive" />
       <Script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js" strategy="afterInteractive" />
@@ -537,7 +542,7 @@ export default function HomePage() {
         @keyframes nb-float { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
       `}</style>
 
-      {/* --- NAV + HERO (unchanged) --- */}
+      {/* NAVBAR */}
       <div className="bg-white shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
@@ -563,6 +568,7 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* HERO with Vanta */}
       <div id="home" className="hero-gradient relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="relative z-10 pb-8 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
@@ -573,7 +579,7 @@ export default function HomePage() {
                   <span className="block text-white">outperforms Flux Kontext</span>
                 </h1>
                 <p className="mt-3 text-base text-gray-800 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                  Transform any image with simple text prompts. Nano-banana's advanced model delivers consistent character editing and scene preservation that surpasses Flux Kontext.
+                  Transform any image with simple text prompts. Nano-banana&apos;s advanced model delivers consistent character editing and scene preservation that surpasses Flux Kontext.
                 </p>
                 <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                   <div className="rounded-md shadow">
@@ -596,10 +602,10 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* ---- REPLACED AI IMAGE EDITOR with full Generator ---- */}
+      {/* FULL GENERATOR */}
       <HomeGeneratorSection />
 
-      {/* ---- Rest of homepage (unchanged) ---- */}
+      {/* FEATURES */}
       <section id="features" className="py-12 bg-white" data-aos="fade-up">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center">
@@ -713,6 +719,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* SHOWCASE */}
       <section id="showcase" className="py-12 bg-gray-50" data-aos="fade-up">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center">
@@ -726,7 +733,7 @@ export default function HomePage() {
               <div className="px-4 py-5 sm:p-6">
                 <img className="w-full h-auto object-cover rounded-md" src="https://picsum.photos/seed/nb1/640/360" alt="Mountain generation" />
                 <h3 className="mt-4 text-lg font-medium text-gray-900">Ultra-Fast Mountain Generation</h3>
-                <p className="mt-1 text-sm text-gray-500">Created in 0.8 seconds with Nano Banana's optimized neural engine</p>
+                <p className="mt-1 text-sm text-gray-500">Created in 0.8 seconds with Nano Banana&apos;s optimized neural engine</p>
               </div>
             </div>
             <div className="bg-white overflow-hidden shadow rounded-lg">
@@ -760,6 +767,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* REVIEWS */}
       <section id="reviews" className="py-12 bg-white" data-aos="fade-up">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center">
@@ -782,7 +790,7 @@ export default function HomePage() {
                 </div>
                 <div className="mt-4">
                   <p className="text-sm text-gray-600">
-                    "This editor completely changed my workflow. The character consistency is incredible - miles ahead of Flux Kontext!"
+                    &quot;This editor completely changed my workflow. The character consistency is incredible - miles ahead of Flux Kontext!&quot;
                   </p>
                 </div>
               </div>
@@ -801,7 +809,7 @@ export default function HomePage() {
                 </div>
                 <div className="mt-4">
                   <p className="text-sm text-gray-600">
-                    "Creating consistent AI influencers has never been easier. It maintains perfect face details across edits!"
+                    &quot;Creating consistent AI influencers has never been easier. It maintains perfect face details across edits!&quot;
                   </p>
                 </div>
               </div>
@@ -820,7 +828,7 @@ export default function HomePage() {
                 </div>
                 <div className="mt-4">
                   <p className="text-sm text-gray-600">
-                    "One-shot editing is basically solved with this tool. The scene blending is so natural and realistic!"
+                    &quot;One-shot editing is basically solved with this tool. The scene blending is so natural and realistic!&quot;
                   </p>
                 </div>
               </div>
@@ -830,6 +838,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* FAQ */}
       <section id="faq" className="py-12 bg-gray-50" data-aos="fade-up">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center">
@@ -844,31 +853,31 @@ export default function HomePage() {
               <div>
                 <dt className="text-lg leading-6 font-medium text-gray-900">What is Nano Banana?</dt>
                 <dd className="mt-2 text-base text-gray-500">
-                  It's a revolutionary AI image editing model that transforms photos using natural language prompts. This is currently the most powerful image editing model available, with exceptional consistency. It offers superior performance compared to Flux Kontext for consistent character editing and scene preservation.
+                  It&apos;s a revolutionary AI image editing model that transforms photos using natural language prompts. This is currently the most powerful image editing model available, with exceptional consistency. It offers superior performance compared to Flux Kontext for consistent character editing and scene preservation.
                 </dd>
               </div>
               <div>
                 <dt className="text-lg leading-6 font-medium text-gray-900">How does it work?</dt>
                 <dd className="mt-2 text-base text-gray-500">
-                  Simply upload an image and describe your desired edits in natural language. The AI understands complex instructions like "place the creature in a snowy mountain" or "imagine the whole face and create it". It processes your text prompt and generates perfectly edited images.
+                  Simply upload an image and describe your desired edits in natural language. The AI understands complex instructions like &quot;place the creature in a snowy mountain&quot; or &quot;imagine the whole face and create it&quot;. It processes your text prompt and generates perfectly edited images.
                 </dd>
               </div>
               <div>
                 <dt className="text-lg leading-6 font-medium text-gray-900">How is it better than Flux Kontext?</dt>
                 <dd className="mt-2 text-base text-gray-500">
-                  This model excels in character consistency, scene blending, and one-shot editing. Users report it "completely destroys" Flux Kontext in preserving facial features and seamlessly integrating edits with backgrounds. It also supports multi-image context, making it ideal for creating consistent AI influencers.
+                  This model excels in character consistency, scene blending, and one-shot editing. Users report it &quot;completely destroys&quot; Flux Kontext in preserving facial features and seamlessly integrating edits with backgrounds. It also supports multi-image context, making it ideal for creating consistent AI influencers.
                 </dd>
               </div>
               <div>
                 <dt className="text-lg leading-6 font-medium text-gray-900">Can I use it for commercial projects?</dt>
                 <dd className="mt-2 text-base text-gray-500">
-                  Yes! It's perfect for creating AI UGC content, social media campaigns, and marketing materials. Many users leverage it for creating consistent AI influencers and product photography. The high-quality outputs are suitable for professional use.
+                  Yes! It&apos;s perfect for creating AI UGC content, social media campaigns, and marketing materials. Many users leverage it for creating consistent AI influencers and product photography. The high-quality outputs are suitable for professional use.
                 </dd>
               </div>
               <div>
                 <dt className="text-lg leading-6 font-medium text-gray-900">What types of edits can it handle?</dt>
                 <dd className="mt-2 text-base text-gray-500">
-                  The editor handles complex edits including face completion, background changes, object placement, style transfers, and character modifications. It excels at understanding contextual instructions like "place in a blizzard" or "create the whole face" while maintaining photorealistic quality.
+                  The editor handles complex edits including face completion, background changes, object placement, style transfers, and character modifications. It excels at understanding contextual instructions like &quot;place in a blizzard&quot; or &quot;create the whole face&quot; while maintaining photorealistic quality.
                 </dd>
               </div>
               <div>
@@ -882,6 +891,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* CTA */}
       <section className="py-12 bg-yellow-600" data-aos="fade-up">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -900,6 +910,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* FOOTER */}
       <footer className="bg-gray-800">
         <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
