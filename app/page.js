@@ -55,6 +55,17 @@ function HomeGeneratorSection() {
     }
   }, [])
 
+<a
+  href="/api/billing/checkout?credits=100&return=/"
+  className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md bg-yellow-600 text-white hover:bg-yellow-700"
+>
+
+Buy 100 credits (\$5)
+
+</a>
+
+
+
   // AOS init on UI changes
   useEffect(() => {
     if (window.AOS) window.AOS.init({ duration: 600, easing: "ease-out", once: true })
