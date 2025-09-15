@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Nano Banana — AI Image Editor",
+  title: "Nano Banana - AI Image Editor",
   description: "Generate and edit images with simple text prompts.",
 };
 
