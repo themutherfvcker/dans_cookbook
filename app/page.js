@@ -212,6 +212,27 @@ function HomeGeneratorSection() {
     }
   }
 
+  async function subscribe() {
+    try {
+      const r = await fetch('/api/subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          success_url: `${location.origin}/success`,
+          cancel_url: `${location.origin}/cancel`,
+        }),
+      })
+      const j = await r.json()
+      if (r.ok && j?.url) {
+        window.location.href = j.url
+      } else {
+        alert(j?.error || `Failed to start subscription`)
+      }
+    } catch (e) {
+      alert(e?.message || 'Subscription failed')
+    }
+  }
+
   return (
     <section id="generator" className="py-12 bg-gray-50" data-aos="fade-up">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -221,6 +242,14 @@ function HomeGeneratorSection() {
           <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
             Experience the power of nano-banana&apos;s natural language image editing. Credits: <span>{balance ?? "—"}</span>
           </p>
+          <div className="mt-2">
+            <button
+              onClick={subscribe}
+              className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md bg-gray-900 text-white hover:bg-black"
+            >
+              Subscribe $5/mo
+            </button>
+          </div>
         </div>
 
         <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-12">
