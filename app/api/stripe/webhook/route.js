@@ -40,6 +40,7 @@ export async function POST(request) {
       const uid = session?.metadata?.uid;
       const credits = Number(session?.metadata?.credits || '0') || 0;
 
+      // One-time credits purchase flow remains supported
       if (uid && credits > 0) {
         await prisma.$transaction(async (tx) => {
           await tx.user.update({
@@ -56,6 +57,37 @@ export async function POST(request) {
             },
           });
         });
+      }
+
+      // Attach Stripe customer id to user for subscription management
+      const customerId = session?.customer;
+      if (uid && customerId) {
+        await prisma.user.update({ where: { id: uid }, data: { stripeId: String(customerId) } });
+      }
+    } else if (event.type === 'invoice.paid') {
+      // Activate subscription entitlements when first invoice is paid
+      const invoice = event.data.object;
+      const customerId = invoice.customer;
+      const subscriptionId = invoice.subscription;
+
+      if (customerId && subscriptionId) {
+        // Look up the user by stripeId
+        const user = await prisma.user.findFirst({ where: { stripeId: String(customerId) } });
+        if (user) {
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { plan: 'pro-monthly' },
+          });
+        }
+      }
+    } else if (event.type === 'customer.subscription.deleted') {
+      const sub = event.data.object;
+      const customerId = sub.customer;
+      if (customerId) {
+        const user = await prisma.user.findFirst({ where: { stripeId: String(customerId) } });
+        if (user) {
+          await prisma.user.update({ where: { id: user.id }, data: { plan: 'free' } });
+        }
       }
     }
   } catch (err) {

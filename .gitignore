@@ -11,3 +11,4 @@ nanobanana-credentials.json
 node_modules/
 .vercel/
 .DS_Store
+.vercel

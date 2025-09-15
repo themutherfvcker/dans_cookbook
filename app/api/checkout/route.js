@@ -5,7 +5,7 @@ import { cookies, headers } from 'next/headers';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-export async function GET(req) {
+async function handleCheckout(req) {
   try {
     // Load Stripe at runtime
     const { default: Stripe } = await import('stripe');
@@ -28,11 +28,19 @@ export async function GET(req) {
     }
 
     // How many credits to sell this time (default 100)
-    const url = new URL(req.url);
-    const credits = Math.max(
-      1,
-      Math.min(100000, parseInt(url.searchParams.get('credits') || '100', 10))
-    );
+    let credits = 100;
+    const method = req.method || 'GET';
+    if (method === 'GET') {
+      const url = new URL(req.url);
+      credits = Math.max(
+        1,
+        Math.min(100000, parseInt(url.searchParams.get('credits') || '100', 10))
+      );
+    } else {
+      const body = await req.json().catch(() => ({}));
+      const c = parseInt(String(body.credits ?? '100'), 10);
+      credits = Math.max(1, Math.min(100000, isNaN(c) ? 100 : c));
+    }
 
     // Build success/cancel URLs from the actual request host (fixes “new user at 25” issue)
     const hdrs = await headers();
@@ -68,3 +76,6 @@ export async function GET(req) {
     );
   }
 }
+
+export async function GET(req) { return handleCheckout(req); }
+export async function POST(req) { return handleCheckout(req); }

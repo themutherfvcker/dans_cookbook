@@ -449,6 +449,27 @@ function HomeGeneratorSection() {
     setFile(null);
   }
 
+  async function subscribe() {
+    try {
+      const r = await fetch("/api/subscription", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          success_url: `${location.origin}/success`,
+          cancel_url: `${location.origin}/cancel`,
+        }),
+      });
+      const j = await r.json();
+      if (r.ok && j?.url) {
+        window.location.href = j.url;
+      } else {
+        alert(j?.error || "Failed to start subscription");
+      }
+    } catch (e) {
+      alert(e?.message || "Subscription failed");
+    }
+  }
+
   return (
     <section id="generator" className="py-12 bg-gray-50" data-aos="fade-up">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -460,13 +481,13 @@ function HomeGeneratorSection() {
           <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
             Credits: <span className="font-semibold">{balance ?? "—"}</span>
           </p>
-          <div className="mt-2">
-            <Link
-              href="/pricing"
-              className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md bg-yellow-600 text-white hover:bg-yellow-700"
-            >
+          <div className="mt-2 flex items-center gap-2 justify-center">
+            <Link href="/pricing" className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md bg-yellow-600 text-white hover:bg-yellow-700">
               Buy 100 credits ($5)
             </Link>
+            <button onClick={subscribe} className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md bg-gray-900 text-white hover:bg-black">
+              Subscribe $5/mo
+            </button>
           </div>
         </div>
 
