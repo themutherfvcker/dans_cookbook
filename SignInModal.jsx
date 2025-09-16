@@ -13,7 +13,7 @@ export default function SignInModal({ open, onClose }) {
     setError("")
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: window.location.href }
+      options: { redirectTo: window.location.origin }
     })
     if (error) setError(error.message)
   }
@@ -23,7 +23,7 @@ export default function SignInModal({ open, onClose }) {
     setError("")
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: window.location.href }
+      options: { emailRedirectTo: window.location.origin }
     })
     if (error) setError(error.message)
     else setSent(true)
