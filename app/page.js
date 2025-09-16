@@ -3,6 +3,192 @@
 import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
 import Link from "next/link";
+import { supabase } from "@/lib/supabaseClient";
+import SignInModal from "@/app/components/SignInModal";
+
+function HomeGeneratorSection() {
+  const [activeTab, setActiveTab] = useState("t2i");
+  const [t2iPrompt, setT2iPrompt] = useState("");
+  const [i2iPrompt, setI2iPrompt] = useState("");
+  const [i2iFile, setI2iFile] = useState(null);
+  const [resultUrl, setResultUrl] = useState(null);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [balance, setBalance] = useState(0);
+  const [showSignIn, setShowSignIn] = useState(false);
+
+  useEffect(() => {
+    fetchBalance();
+  }, []);
+
+  const fetchBalance = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data, error } = await supabase.from("credits").select("balance").eq("user_id", user.id).single();
+        if (error) throw error;
+        setBalance(data.balance);
+      } else {
+        setBalance(0);
+      }
+    } catch (e) {
+      console.error("Error fetching balance:", e.message);
+      setBalance(0);
+    }
+  };
+
+  const handleGenerate = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      setShowSignIn(true);
+      return;
+    }
+
+    setError("");
+    setResultUrl(null);
+    setLoading(true);
+
+    try {
+      let response;
+      if (activeTab === "t2i") {
+        if (!t2iPrompt) { setError("Please enter a prompt."); return; }
+        response = await fetch("/api/vertex/imagine", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: t2iPrompt }),
+        });
+      } else {
+        if (!i2iFile) { setError("Please choose an image."); return; }
+        if (!i2iPrompt) { setError("Please enter an edit prompt."); return; }
+
+        const formData = new FormData();
+        formData.append("prompt", i2iPrompt);
+        formData.append("image", i2iFile);
+
+        response = await fetch("/api/vertex/edit", {
+          method: "POST",
+          body: formData,
+        });
+      }
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to generate image.");
+      }
+
+      setResultUrl(data.dataUrl);
+      fetchBalance(); // Refresh balance after generation
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <section id="generator" className="py-12 bg-white" data-aos="fade-up">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="lg:text-center">
+          <h2 className="text-base text-yellow-600 font-semibold tracking-wide uppercase">AI Image Editor</h2>
+          <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">Try the Editor</p>
+          <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+            Credits: {balance}
+            <Link href="/pricing" className="ml-2 text-yellow-600 hover:text-yellow-500">Buy 100 credits ($5)</Link>
+          </p>
+        </div>
+
+        <div className="mt-10 max-w-3xl mx-auto bg-gray-50 p-6 rounded-lg shadow-lg">
+          <div className="flex justify-center mb-6">
+            <button
+              onClick={() => setActiveTab("t2i")}
+              className={`px-4 py-2 rounded-l-md text-sm font-medium ${activeTab === "t2i" ? "bg-yellow-600 text-white" : "bg-white text-gray-700 border"}`}
+            >
+              Text to Image
+            </button>
+            <button
+              onClick={() => setActiveTab("i2i")}
+              className={`px-4 py-2 rounded-r-md text-sm font-medium ${activeTab === "i2i" ? "bg-yellow-600 text-white" : "bg-white text-gray-700 border"}`}
+            >
+              Image to Image
+            </button>
+          </div>
+
+          {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
+
+          {activeTab === "t2i" && (
+            <div className="space-y-4">
+              <textarea
+                rows="4"
+                className="w-full rounded-md border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
+                placeholder="A cinematic banana astronaut on the moon, 35mm film look"
+                value={t2iPrompt}
+                onChange={(e) => setT2iPrompt(e.target.value)}
+              ></textarea>
+              <button
+                onClick={handleGenerate}
+                disabled={loading}
+                className="w-full px-4 py-2 rounded-md text-white bg-yellow-600 hover:bg-yellow-700 disabled:opacity-50"
+              >
+                {loading ? "Generating..." : "Generate"}
+              </button>
+            </div>
+          )}
+
+          {activeTab === "i2i" && (
+            <div className="space-y-4">
+              <div className="border-2 border-dashed border-gray-300 rounded-md p-6 text-center">
+                <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-yellow-600 hover:text-yellow-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-yellow-500">
+                  <span>Upload a file</span>
+                  <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={(e) => setI2iFile(e.target.files[0])} />
+                </label>
+                <p className="pl-1">or drag and drop</p>
+                <p className="text-xs text-gray-500">PNG, JPG up to 10 MB</p>
+                {i2iFile && <p className="text-sm text-gray-700 mt-2">Selected file: {i2iFile.name}</p>}
+              </div>
+              <textarea
+                rows="4"
+                className="w-full rounded-md border-gray-300 focus:ring-yellow-500 focus:border-yellow-500"
+                placeholder="An astronaut riding a banana on the moon, photorealistic"
+                value={i2iPrompt}
+                onChange={(e) => setI2iPrompt(e.target.value)}
+              ></textarea>
+              <button
+                onClick={handleGenerate}
+                disabled={loading}
+                className="w-full px-4 py-2 rounded-md text-white bg-yellow-600 hover:bg-yellow-700 disabled:opacity-50"
+              >
+                {loading ? "Generating..." : "Generate"}
+              </button>
+            </div>
+          )}
+
+          {resultUrl && (
+            <div className="mt-6 text-center">
+              <h3 className="text-lg font-medium text-gray-900">Output</h3>
+              <img src={resultUrl} alt="Generated Image" className="mt-4 mx-auto rounded-md shadow-md max-w-full h-auto" />
+              <a
+                href={resultUrl}
+                download="nano-banana-image.png"
+                className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+              >
+                Download Image
+              </a>
+            </div>
+          )}
+
+          {!resultUrl && !loading && (
+            <div className="mt-6 text-center text-gray-500">
+              <h3 className="text-lg font-medium text-gray-900">Output</h3>
+              <p className="mt-2">No image yet. Enter a prompt and generate.</p>
+            </div>
+          )}
+        </div>
+      </div>
+      <SignInModal open={showSignIn} onClose={() => setShowSignIn(false)} />
+    </section>
+  );
+}
 
 export default function HomePage() {
   // -------- Vanta / Lib init --------
@@ -112,12 +298,12 @@ export default function HomePage() {
               </Link>
             </div>
             <div className="flex items-center">
-              <a
-                href="#generator"
+              <button
+                onClick={() => setShowSignIn(true)}
                 className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
               >
                 Try Now
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -138,12 +324,12 @@ export default function HomePage() {
                 Edit with plain text prompts while preserving faces, identities, and details. Nano Banana makes hard edits feel easy.
               </p>
               <div className="mt-6 flex gap-3">
-                <a
-                  href="#generator"
+                <button
+                  onClick={() => setShowSignIn(true)}
                   className="inline-flex items-center px-6 py-3 rounded-md text-yellow-700 bg-white border border-transparent shadow hover:bg-gray-50"
                 >
                   Get Started
-                </a>
+                </button>
                 <a
                   href="#features"
                   className="inline-flex items-center px-6 py-3 rounded-md text-white bg-yellow-600/70 hover:bg-yellow-600"
@@ -334,44 +520,29 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             <div className="col-span-2">
-              <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">About Nano Banana</h3>
-              <p className="mt-4 text-base text-gray-300">
-                The most advanced text-based image editor for precise, natural-looking results.
-              </p>
+              <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">Nano Banana</h3>
+              <p className="mt-4 text-base text-gray-300">AI Image Editor</p>
             </div>
             <div>
               <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">Product</h3>
-              <ul className="mt-4 space-y-4">
+              <ul role="list" className="mt-4 space-y-4">
                 <li><a href="#features" className="text-base text-gray-300 hover:text-white">Features</a></li>
                 <li><a href="#showcase" className="text-base text-gray-300 hover:text-white">Showcase</a></li>
-                <li><a href="#faq" className="text-base text-gray-300 hover:text-white">FAQ</a></li>
-                <li><Link href="/pricing" className="text-base text-gray-300 hover:text-white">Pricing</Link></li>
+                <li><a href="#reviews" className="text-base text-gray-300 hover:text-white">Reviews</a></li>
+                <li><a href="/pricing" className="text-base text-gray-300 hover:text-white">Pricing</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">Legal</h3>
-              <ul className="mt-4 space-y-4">
-                <li><Link href="/privacy" className="text-base text-gray-300 hover:text-white">Privacy</Link></li>
-                <li><Link href="/terms" className="text-base text-gray-300 hover:text-white">Terms</Link></li>
-                <li><a href="#" className="text-base text-gray-300 hover:text-white">Cookie Policy</a></li>
+              <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">Company</h3>
+              <ul role="list" className="mt-4 space-y-4">
+                <li><a href="/terms" className="text-base text-gray-300 hover:text-white">Terms</a></li>
+                <li><a href="/privacy" className="text-base text-gray-300 hover:text-white">Privacy</a></li>
+                <li><a href="#faq" className="text-base text-gray-300 hover:text-white">FAQ</a></li>
               </ul>
             </div>
           </div>
-          <div className="mt-8 border-t border-gray-700 pt-8 md:flex md:items-center md:justify-between">
-            <div className="flex space-x-6 md:order-2">
-              <a href="#" className="text-gray-400 hover:text-gray-300" aria-label="Twitter">
-                <i data-feather="twitter" className="h-6 w-6" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-gray-300" aria-label="Instagram">
-                <i data-feather="instagram" className="h-6 w-6" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-gray-300" aria-label="GitHub">
-                <i data-feather="github" className="h-6 w-6" />
-              </a>
-            </div>
-            <p className="mt-8 text-base text-gray-400 md:mt-0 md:order-1">
-              &copy; {new Date().getFullYear()} Nano Banana. All rights reserved.
-            </p>
+          <div className="mt-8 border-t border-gray-700 pt-8">
+            <p className="text-base text-gray-400 xl:text-center">&copy; 2023 Nano Banana. All rights reserved.</p>
           </div>
         </div>
       </footer>
@@ -379,264 +550,3 @@ export default function HomePage() {
   );
 }
 
-/* =========================
-   HomeGeneratorSection
-   ========================= */
-function HomeGeneratorSection() {
-  const [active, setActive] = useState("image"); // "image" | "text"
-  const [prompt, setPrompt] = useState("a cinematic banana astronaut on the moon, 35mm film look");
-  const [file, setFile] = useState(null);
-  const [resultUrl, setResultUrl] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [balance, setBalance] = useState(null);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const r = await fetch("/api/session", { cache: "no-store" });
-        const j = await r.json();
-        if (typeof j?.balance === "number") setBalance(j.balance);
-      } catch {
-        /* noop */
-      }
-    })();
-  }, []);
-
-  async function runGenerate() {
-    if (loading) return;
-    const p = (prompt || "").trim();
-    if (!p) {
-      alert("Please enter a prompt");
-      return;
-    }
-    if (active === "image" && !file) {
-      alert("Please upload a reference image or switch to Text to Image.");
-      return;
-    }
-
-    setLoading(true);
-    setResultUrl(null);
-    try {
-      let resp;
-      if (active === "image") {
-        const fd = new FormData();
-        fd.append("prompt", p);
-        fd.append("image", file, file.name);
-        resp = await fetch("/api/vertex/edit", { method: "POST", body: fd });
-      } else {
-        resp = await fetch("/api/vertex/imagine", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt: p }),
-        });
-      }
-
-      const j = await resp.json();
-      if (!resp.ok || !j?.ok) {
-        throw new Error(j?.error || `HTTP ${resp.status}`);
-      }
-      if (typeof j?.balance === "number") setBalance(j.balance);
-      setResultUrl(j.dataUrl || null);
-    } catch (e) {
-      alert(e?.message || "Generate failed");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  function clearAll() {
-    setResultUrl(null);
-    setFile(null);
-  }
-
-  async function subscribe() {
-    try {
-      const r = await fetch("/api/subscription", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          success_url: `${location.origin}/success`,
-          cancel_url: `${location.origin}/cancel`,
-        }),
-      });
-      const j = await r.json();
-      if (r.ok && j?.url) {
-        window.location.href = j.url;
-      } else {
-        alert(j?.error || "Failed to start subscription");
-      }
-    } catch (e) {
-      alert(e?.message || "Subscription failed");
-    }
-  }
-
-  return (
-    <section id="generator" className="py-12 bg-gray-50" data-aos="fade-up">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="lg:text-center">
-          <h2 className="text-base text-yellow-600 font-semibold tracking-wide uppercase">AI Image Editor</h2>
-          <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-            Try the Editor
-          </p>
-          <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-            Credits: <span className="font-semibold">{balance ?? "—"}</span>
-          </p>
-          <div className="mt-2 flex items-center gap-2 justify-center">
-            <Link href="/pricing" className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md bg-yellow-600 text-white hover:bg-yellow-700">
-              Buy 100 credits ($5)
-            </Link>
-            <button onClick={subscribe} className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md bg-gray-900 text-white hover:bg-black">
-              Subscribe $5/mo
-            </button>
-          </div>
-        </div>
-
-        <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-2">
-          {/* Left */}
-          <div className="bg-white overflow-hidden shadow rounded-lg">
-            <div className="px-4 py-5 sm:p-6">
-              {/* Tabs */}
-              <div className="flex w-full rounded-lg overflow-hidden border">
-                <button
-                  className={`flex-1 px-4 py-2 text-sm font-medium ${
-                    active === "image" ? "bg-yellow-50 text-yellow-700" : "bg-white text-gray-700"
-                  }`}
-                  onClick={() => setActive("image")}
-                >
-                  Image to Image
-                </button>
-                <button
-                  className={`flex-1 px-4 py-2 text-sm font-medium ${
-                    active === "text" ? "bg-yellow-50 text-yellow-700" : "bg-white text-gray-700"
-                  }`}
-                  onClick={() => setActive("text")}
-                >
-                  Text to Image
-                </button>
-              </div>
-
-              {/* Content */}
-              <div className="mt-6">
-                {active === "image" ? (
-                  <>
-                    <label className="block text-sm font-medium text-gray-700">Reference Image</label>
-                    <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                      <div className="space-y-1 text-center">
-                        <svg
-                          className="mx-auto h-12 w-12 text-gray-400"
-                          stroke="currentColor"
-                          fill="none"
-                          viewBox="0 0 48 48"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                        <div className="flex text-sm text-gray-600 items-center justify-center">
-                          <label
-                            htmlFor="nb-file"
-                            className="relative cursor-pointer bg-white rounded-md font-medium text-yellow-600 hover:text-yellow-500 focus-within:outline-none"
-                          >
-                            <span>Upload a file</span>
-                            <input
-                              id="nb-file"
-                              name="nb-file"
-                              type="file"
-                              accept="image/*"
-                              className="sr-only"
-                              onChange={(e) => setFile(e.target.files?.[0] || null)}
-                            />
-                          </label>
-                          <p className="pl-2">or drag and drop</p>
-                        </div>
-                        <p className="text-xs text-gray-500">PNG, JPG up to 10 MB</p>
-                        {file ? <p className="text-xs text-gray-600">Selected: {file.name}</p> : null}
-                      </div>
-                    </div>
-                  </>
-                ) : null}
-
-                <div className="mt-4">
-                  <label htmlFor="nb-prompt" className="block text-sm font-medium text-gray-700">
-                    Prompt
-                  </label>
-                  <textarea
-                    id="nb-prompt"
-                    rows={4}
-                    className="mt-1 shadow-sm focus:ring-yellow-500 focus:border-yellow-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                    placeholder="Describe the edit or the image you want…"
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                  />
-                </div>
-
-                <div className="mt-5 flex gap-3">
-                  <button
-                    onClick={runGenerate}
-                    disabled={loading}
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 disabled:opacity-60"
-                  >
-                    {loading ? "Generating…" : "Generate"}
-                  </button>
-                  <button
-                    onClick={clearAll}
-                    className="inline-flex items-center px-4 py-2 border text-sm font-medium rounded-md hover:bg-gray-50"
-                  >
-                    Clear
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right */}
-          <div className="bg-white overflow-hidden shadow rounded-lg">
-            <div className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">Output</h3>
-              <p className="mt-1 text-sm text-gray-500">Your AI creation appears here.</p>
-              <div className="mt-5 border-t border-gray-200" />
-              <div className="mt-6 min-h-[16rem] flex items-center justify-center">
-                {!resultUrl ? (
-                  <div className="text-center text-gray-500">
-                    <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2z"
-                      />
-                    </svg>
-                    <p className="mt-2 text-sm">No image yet. Enter a prompt and generate.</p>
-                  </div>
-                ) : (
-                  <div className="w-full">
-                    <img src={resultUrl} alt="Result" className="w-full h-auto rounded-md border" />
-                    <div className="mt-3 flex gap-3">
-                      <a
-                        href={resultUrl}
-                        download="nanobanana.png"
-                        className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md bg-gray-900 text-white hover:bg-black"
-                      >
-                        Download PNG
-                      </a>
-                      <Link
-                        href="/pricing"
-                        className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md border hover:bg-gray-50"
-                      >
-                        Buy credits
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
