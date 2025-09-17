@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import Script from "next/script";
 import Link from "next/link";
 import { getSupabase } from "@/lib/supabaseClient";
@@ -16,10 +17,23 @@ function HomeGeneratorSection() {
   const [loading, setLoading] = useState(false);
   const [balance, setBalance] = useState(0);
   const [showSignIn, setShowSignIn] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     fetchBalance();
   }, []);
+
+  // After the user authenticates (Google/Email), redirect to the full generator page
+  useEffect(() => {
+    const supabase = getSupabase();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setShowSignIn(false);
+        router.push("/generator");
+      }
+    });
+    return () => subscription?.unsubscribe();
+  }, [router]);
 
   const fetchBalance = async () => {
     try {
@@ -332,12 +346,12 @@ export default function HomePage() {
                 >
                   Get Started
                 </button>
-                <a
-                  href="#features"
-                  className="inline-flex items-center px-6 py-3 rounded-md text-white bg-yellow-600/70 hover:bg-yellow-600"
-                >
-                  Learn More
-                </a>
+            <a
+              href="#features"
+              className="inline-flex items-center px-6 py-3 rounded-md text-white bg-yellow-600/70 hover:bg-yellow-600"
+            >
+              Learn More
+            </a>
               </div>
             </div>
 
@@ -417,7 +431,7 @@ export default function HomePage() {
 
           <div className="mt-10 text-center">
             <a
-              href="#generator"
+              href="/generator"
               className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
             >
               Try the Generator
