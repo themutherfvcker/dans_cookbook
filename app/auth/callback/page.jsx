@@ -1,12 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
 export default function AuthCallbackPage() {
+  return (
+    <Suspense fallback={<LoadingView />}> 
+      <CallbackInner />
+    </Suspense>
+  );
+}
+
+function LoadingView() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-white p-6">
+      <div className="max-w-md w-full text-center">
+        <h1 className="text-xl font-semibold text-gray-900">Signing you in…</h1>
+        <p className="mt-2 text-sm text-gray-600">Completing Google authentication.</p>
+      </div>
+    </div>
+  );
+}
+
+function CallbackInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState("");
@@ -22,7 +38,6 @@ export default function AuthCallbackPage() {
           return;
         }
 
-        // Lazy-load Supabase only on the client to avoid build-time env access
         const { getSupabase } = await import("@/lib/supabaseClient");
         const supabase = getSupabase();
         const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(window.location.href);
@@ -31,7 +46,6 @@ export default function AuthCallbackPage() {
           return;
         }
 
-        // Optional: small delay to ensure session propagation
         setTimeout(() => {
           if (!isMounted) return;
           router.replace("/");
@@ -53,9 +67,7 @@ export default function AuthCallbackPage() {
         <h1 className="text-xl font-semibold text-gray-900">Signing you in…</h1>
         <p className="mt-2 text-sm text-gray-600">Completing Google authentication.</p>
         {error && (
-          <div className="mt-4 text-sm text-red-600">
-            {error}
-          </div>
+          <div className="mt-4 text-sm text-red-600">{error}</div>
         )}
       </div>
     </div>
