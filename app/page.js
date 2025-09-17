@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
 import Link from "next/link";
-import { supabase } from "@/lib/supabaseClient";
+import { getSupabase } from "@/lib/supabaseClient";
 import SignInModal from "@/app/components/SignInModal";
 
 function HomeGeneratorSection() {
@@ -23,6 +23,7 @@ function HomeGeneratorSection() {
 
   const fetchBalance = async () => {
     try {
+      const supabase = getSupabase();
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { data, error } = await supabase.from("credits").select("balance").eq("user_id", user.id).single();
@@ -38,6 +39,7 @@ function HomeGeneratorSection() {
   };
 
   const handleGenerate = async () => {
+    const supabase = getSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       setShowSignIn(true);
