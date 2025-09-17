@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { supabase } from "@/lib/supabaseClient"
+import { getSupabase } from "@/lib/supabaseClient"
 
 export default function SignInModal({ open, onClose }) {
   const [email, setEmail] = useState("")
@@ -9,11 +9,15 @@ export default function SignInModal({ open, onClose }) {
 
   if (!open) return null
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || (typeof window !== "undefined" ? window.location.origin : "")
+  const callbackUrl = `${baseUrl}/auth/callback`
+
   async function signInWithGoogle() {
     setError("")
+    const supabase = getSupabase()
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: window.location.href }
+      options: { redirectTo: callbackUrl }
     })
     if (error) setError(error.message)
   }
@@ -21,9 +25,10 @@ export default function SignInModal({ open, onClose }) {
   async function signInWithEmail(e) {
     e.preventDefault()
     setError("")
+    const supabase = getSupabase()
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: window.location.href }
+      options: { emailRedirectTo: callbackUrl }
     })
     if (error) setError(error.message)
     else setSent(true)

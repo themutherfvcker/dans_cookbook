@@ -1,8 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is the Nano Banana AI Image Editor (Next.js App Router).
 
 ## Getting Started
 
-First, run the development server:
+Environment variables:
+
+Create a `.env.local` with at least:
+
+```
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
+
+Supabase settings:
+- Add Google as an OAuth provider in Supabase Auth.
+- Authorized redirect URLs must include:
+  - http://localhost:3000/auth/callback
+  - https://www.nanobanana-ai.dev/auth/callback
+
+Run the development server:
 
 ```bash
 npm run dev
