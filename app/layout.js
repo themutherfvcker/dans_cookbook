@@ -12,13 +12,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Cookbook",
-  description: "Discover, save, and share delicious recipes.",
+  title: "Sixth Sense Cooking | Daniel Webb",
+  description: "Unlock your culinary intuition with Daniel Webb.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
       </body>
