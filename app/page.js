@@ -91,7 +91,7 @@ export default function HomePage() {
       `}</style>
 
       {/* Navigation */}
-      <nav className="bg-white shadow-lg sticky top-0 z-50">
+      <nav className="bg-white shadow-lg sticky top-0 z-50 border-b border-[rgba(20,83,45,0.08)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
@@ -128,8 +128,8 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <div id="vanta-globe" className="hero-bg min-h-screen flex items-center justify-center text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-black opacity-40" />
+      <div id="vanta-globe" className="hero-bg min-h-screen flex items-center justify-center text-white relative overflow-hidden" style={{backgroundImage: "linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('http://static.photos/food/1200x630/42')"}}>
+        <div className="absolute inset-0" style={{background: "radial-gradient(ellipse at center, rgba(20,83,45,0.35), transparent 60%)"}} />
         <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8" data-aos="fade-up">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">Sixth Sense Cooking</h1>
           <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Unlock your culinary intuition with Daniel Webb's revolutionary approach to cooking</p>
@@ -141,7 +141,7 @@ export default function HomePage() {
       </div>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-white">
+      <section id="about" className="py-20 bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center" data-aos="fade-up">
             <h2 className="text-base text-red-600 font-semibold tracking-wide uppercase">About the Book</h2>
@@ -209,8 +209,10 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
-                <div className="hidden lg:block">
-                  <img className="h-full w-full object-cover" src="http://static.photos/food/800x800/23" alt="Cookbook preview" />
+                <div className="hidden lg:block p-8">
+                  <div className="polaroid">
+                    <img className="h-full w-full object-cover" src="http://static.photos/food/800x800/23" alt="Cookbook preview" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -219,7 +221,7 @@ export default function HomePage() {
       </section>
 
       {/* Recipe Preview Section */}
-      <section id="recipes" className="py-20 bg-gray-50">
+      <section id="recipes" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center" data-aos="fade-up">
             <h2 className="text-base text-red-600 font-semibold tracking-wide uppercase">Featured Recipes</h2>
@@ -229,7 +231,9 @@ export default function HomePage() {
 
           <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             <div className="bg-white rounded-xl shadow-md overflow-hidden recipe-card transition duration-300" data-aos="fade-up" data-aos-delay="100">
-              <img className="h-48 w-full object-cover" src="http://static.photos/food/600x400/1" alt="Intuitive Pasta" />
+              <div className="polaroid">
+                <img className="h-48 w-full object-cover" src="http://static.photos/food/600x400/1" alt="Intuitive Pasta" />
+              </div>
               <div className="p-8">
                 <div className="uppercase tracking-wide text-sm text-red-600 font-semibold">Pasta</div>
                 <h3 className="mt-2 text-xl font-semibold text-gray-900">Sensory Pasta Primavera</h3>
@@ -242,7 +246,9 @@ export default function HomePage() {
             </div>
 
             <div className="bg-white rounded-xl shadow-md overflow-hidden recipe-card transition duration-300" data-aos="fade-up" data-aos-delay="200">
-              <img className="h-48 w-full object-cover" src="http://static.photos/food/600x400/2" alt="Intuitive Soup" />
+              <div className="polaroid">
+                <img className="h-48 w-full object-cover" src="http://static.photos/food/600x400/2" alt="Intuitive Soup" />
+              </div>
               <div className="p-8">
                 <div className="uppercase tracking-wide text-sm text-red-600 font-semibold">Soup</div>
                 <h3 className="mt-2 text-xl font-semibold text-gray-900">Instinctive Seasonal Soup</h3>
@@ -255,7 +261,9 @@ export default function HomePage() {
             </div>
 
             <div className="bg-white rounded-xl shadow-md overflow-hidden recipe-card transition duration-300" data-aos="fade-up" data-aos-delay="300">
-              <img className="h-48 w-full object-cover" src="http://static.photos/food/600x400/3" alt="Intuitive Roast" />
+              <div className="polaroid">
+                <img className="h-48 w-full object-cover" src="http://static.photos/food/600x400/3" alt="Intuitive Roast" />
+              </div>
               <div className="p-8">
                 <div className="uppercase tracking-wide text-sm text-red-600 font-semibold">Main Course</div>
                 <h3 className="mt-2 text-xl font-semibold text-gray-900">Perfectly Timed Roast</h3>
@@ -307,7 +315,7 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 bg-gray-50">
+      <section id="testimonials" className="py-20 bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center" data-aos="fade-up">
             <h2 className="text-base text-red-600 font-semibold tracking-wide uppercase">Testimonials</h2>
@@ -326,7 +334,7 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="mt-4">
-                <p className="text-gray-600">"This book completely changed how I approach cooking. I no longer panic when I'm missing an ingredient—I just adapt! Daniel's sensory exercises have made me so much more confident in the kitchen."</p>
+                <p className="text-gray-600 font-hand text-xl">"This book completely changed how I approach cooking. I no longer panic when I'm missing an ingredient—I just adapt! Daniel's sensory exercises have made me so much more confident in the kitchen."</p>
                 <div className="mt-4 flex text-red-500">
                   <i data-feather="star" className="h-5 w-5 fill-current" />
                   <i data-feather="star" className="h-5 w-5 fill-current" />
@@ -348,7 +356,7 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="mt-4">
-                <p className="text-gray-600">"Even after culinary school and years in professional kitchens, this book taught me new ways to connect with ingredients. It's rare to find a cookbook that changes your fundamental approach to cooking."</p>
+                <p className="text-gray-600 font-hand text-xl">"Even after culinary school and years in professional kitchens, this book taught me new ways to connect with ingredients. It's rare to find a cookbook that changes your fundamental approach to cooking."</p>
                 <div className="mt-4 flex text-red-500">
                   <i data-feather="star" className="h-5 w-5 fill-current" />
                   <i data-feather="star" className="h-5 w-5 fill-current" />
@@ -370,7 +378,7 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="mt-4">
-                <p className="text-gray-600">"I've reviewed hundreds of cookbooks, but none have had the lasting impact on my cooking that Sixth Sense Cooking has. It's not just recipes—it's a whole new way of thinking about food."</p>
+                <p className="text-gray-600 font-hand text-xl">"I've reviewed hundreds of cookbooks, but none have had the lasting impact on my cooking that Sixth Sense Cooking has. It's not just recipes—it's a whole new way of thinking about food."</p>
                 <div className="mt-4 flex text-red-500">
                   <i data-feather="star" className="h-5 w-5 fill-current" />
                   <i data-feather="star" className="h-5 w-5 fill-current" />

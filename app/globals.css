@@ -1,3 +1,38 @@
 /* app/globals.css */
-:root { --nb-accent: #eab308; }
+:root {
+  --nb-accent: #eab308;
+  --brand-green: #14532d; /* deep green */
+  --brand-green-700: #166534;
+  --brand-green-800: #0f3e2d;
+  --brand-cream: #f8f5ec; /* warm cream */
+  --brand-earth: #a16207; /* earthy amber/brown */
+}
 html, body { margin: 0; padding: 0; }
+
+/* Handwritten font helper */
+.font-hand { font-family: var(--font-hand), cursive; }
+
+/* Polaroid-style frame */
+.polaroid {
+  background: #fffdf5;
+  padding: 12px 12px 36px 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12), 0 8px 10px rgba(0,0,0,0.06);
+  border-radius: 6px;
+}
+
+/* Theme overrides to map red utility classes to brand green/earthy tones */
+.text-red-600 { color: var(--brand-green) !important; }
+.text-red-300 { color: color-mix(in srgb, var(--brand-green) 55%, white) !important; }
+.text-red-200 { color: color-mix(in srgb, var(--brand-green) 35%, white) !important; }
+.bg-red-600 { background-color: var(--brand-green) !important; }
+.bg-red-700 { background-color: var(--brand-green-700) !important; }
+.hover\:bg-red-700:hover { background-color: var(--brand-green-700) !important; }
+.hover\:text-red-700:hover { color: var(--brand-green-700) !important; }
+.focus\:ring-red-500:focus { --tw-ring-color: var(--brand-green) !important; }
+.focus\:border-red-500:focus { border-color: var(--brand-green) !important; }
+.from-red-600 { --tw-gradient-from: var(--brand-green) !important; }
+.to-red-800 { --tw-gradient-to: var(--brand-earth) !important; }
+
+/* Creamy backgrounds */
+.bg-cream { background-color: var(--brand-cream); }
