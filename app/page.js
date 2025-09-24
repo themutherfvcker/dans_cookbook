@@ -215,7 +215,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="mt-10 lg:mt-0" data-aos="fade-left">
-              <h2 className="text-3xl font-extrabold text-gray-900">About the Author</h2>
+              <h2 className="text-3xl font-extrabold text-gray-900">About Dan</h2>
               <p className="mt-4 text-lg text-gray-600">Daniel Webb has spent over 20 years in professional kitchens around the world, from Michelin-starred restaurants to humble street food stalls. His journey led him to develop a unique approach to cooking that emphasizes intuition over rigid recipes.</p>
               <p className="mt-4 text-lg text-gray-600">After teaching cooking classes for a decade, Daniel realized that the most successful cooks weren't those who followed recipes perfectly, but those who learned to trust their senses and adapt creatively.</p>
               <p className="mt-4 text-lg text-gray-600">"Sixth Sense Cooking" distills Daniel's philosophy into an accessible system that anyone can use to become a more confident, creative cook.</p>
