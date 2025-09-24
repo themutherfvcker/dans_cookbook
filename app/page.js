@@ -49,18 +49,18 @@ export default function HomePage() {
 
       {/* Hero Section - Full-width background with About the Book copy */}
       <section className="relative">
-        <div className="relative w-full min-h-[420px] lg:min-h-[620px]">
+        <div className="relative w-full min-h-[420px] sm:min-h-[480px] lg:min-h-[620px]">
           <div
             className="absolute inset-0"
             style={{
               backgroundImage: "url('/DanHoldingBookKitchen.png')",
               backgroundSize: "cover",
-              backgroundPosition: "center 40%",
+              backgroundPosition: "center 35%",
             }}
           />
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-            <div className="max-w-2xl">
-              <div className="inline-block rounded-xl bg-black/55 backdrop-blur-sm p-6 sm:p-8 shadow-lg">
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-24">
+            <div className="max-w-2xl text-center lg:text-left">
+              <div className="inline-block rounded-xl bg-black/55 backdrop-blur-sm p-6 sm:p-8 shadow-lg mx-auto lg:mx-0">
                 <h1 className="text-3xl sm:text-4xl md:text-5xl leading-tight font-extrabold tracking-tight text-white">Not Just Recipes. A Journey.</h1>
                 <p className="mt-5 text-base sm:text-lg md:text-xl text-red-100">Sixth Sense Cooking isn’t just a cookbook—it’s a window into Dan’s world of experimenting, exploring ingredients, and finding inspiration through music.</p>
                 <ul className="mt-7 space-y-3">
@@ -78,7 +78,7 @@ export default function HomePage() {
                   </li>
                 </ul>
                 <div className="mt-8">
-                  <a href="#purchase" className="inline-block bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md text-base font-semibold transition duration-300">Buy the Book - $29.99</a>
+                  <a href="#purchase" className="inline-block w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md text-base font-semibold transition duration-300">Buy the Book - $29.99</a>
                 </div>
               </div>
             </div>
@@ -125,11 +125,11 @@ export default function HomePage() {
               <p className="mt-5 text-xl md:text-2xl text-gray-700 max-w-2xl">Unlock your culinary intuition with Daniel Webb's revolutionary approach to cooking</p>
               <p className="mt-3 text-base md:text-lg text-gray-600 max-w-2xl">A cookbook that blends flavor, music, and creativity to take your cooking to the next level.</p>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300">Buy the Book - $29.99</a>
+                <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300 w-full sm:w-auto text-center">Buy the Book - $29.99</a>
               </div>
             </div>
             <div className="order-1 lg:order-2" data-aos="fade-left">
-              <div className="rounded-2xl overflow-hidden shadow-2xl w-full max-w-[440px] md:max-w-[520px] lg:max-w-[476px] xl:max-w-[520px] lg:ml-auto mx-auto">
+              <div className="rounded-2xl overflow-hidden shadow-2xl w-full max-w-[320px] sm:max-w-[380px] md:max-w-[480px] lg:max-w-[520px] lg:ml-auto mx-auto">
                 <img src="/cookbook3.png" alt="Open spread mockup" className="w-full h-auto object-cover" />
               </div>
             </div>
