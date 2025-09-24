@@ -118,12 +118,9 @@ export default function HomePage() {
                 </ul>
               </div>
               <div className="hidden lg:block p-8">
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="polaroid rotate-[-3deg] shadow-xl">
-                    <img className="h-full w-full object-cover" src="/cookbook3.png" alt="Barbecue - polaroid style" />
-                  </div>
-                  <div className="polaroid rotate-[2deg] shadow-xl">
-                    <img className="h-full w-full object-cover" src="/DansBookDedication.jpg" alt="Auntie Helen’s pub - polaroid style" />
+                <div className="max-w-lg ml-auto">
+                  <div className="polaroid rotate-[-2deg] shadow-xl">
+                    <img className="h-full w-full object-cover" src="/cookbook3.png" alt="Open spread - polaroid style" />
                   </div>
                 </div>
               </div>
