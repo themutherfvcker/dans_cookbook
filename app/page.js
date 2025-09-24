@@ -142,13 +142,12 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
             <div className="relative" data-aos="fade-right">
-              <div className="relative rounded-xl overflow-hidden shadow-xl">
-                <img className="w-full h-auto" src="/DansBackgound.png" alt="Daniel Webb" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90" />
-                <div className="absolute bottom-0 left-0 p-6">
-                  <h3 className="text-xl font-bold text-white">Daniel Webb</h3>
-                  <p className="text-red-300">Chef & Culinary Philosopher</p>
-                </div>
+              <div className="bg-white rounded-xl shadow-2xl p-4">
+                <img className="w-full h-auto rounded-lg object-cover" src="/DansBackgound.png" alt="Daniel Webb" />
+              </div>
+              <div className="mt-4">
+                <h3 className="text-xl font-bold text-gray-900">Daniel Webb</h3>
+                <p className="text-gray-600">Chef & Culinary Philosopher</p>
               </div>
             </div>
             <div className="mt-10 lg:mt-0" data-aos="fade-left">
