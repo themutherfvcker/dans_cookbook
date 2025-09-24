@@ -49,8 +49,8 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-cream">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-24">
-          <div className="grid lg:grid-cols-2 gap-10 items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 lg:py-20">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 items-center">
             <div className="order-2 lg:order-1" data-aos="fade-right">
               <h1 className="text-4xl md:text-6xl font-bold text-gray-900">Sixth Sense Cooking</h1>
               <p className="mt-5 text-xl md:text-2xl text-gray-700 max-w-2xl">Unlock your culinary intuition with Daniel Webb's revolutionary approach to cooking</p>
@@ -60,7 +60,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="order-1 lg:order-2" data-aos="fade-left">
-              <div className="rounded-2xl overflow-hidden shadow-2xl w-full max-w-[440px] md:max-w-[520px] lg:max-w-[476px] xl:max-w-[520px] lg:ml-auto">
+              <div className="rounded-2xl overflow-hidden shadow-2xl w-full max-w-[440px] md:max-w-[520px] lg:max-w-[476px] xl:max-w-[520px] lg:ml-auto mx-auto">
                 <img src="/cookbook3.png" alt="Open spread mockup" className="w-full h-auto object-cover" />
               </div>
             </div>
@@ -69,9 +69,9 @@ export default function HomePage() {
       </section>
 
       {/* Sneak Peek / Inside the Book */}
-      <section className="py-20 bg-cream">
+      <section className="py-16 sm:py-18 lg:py-20 bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-10 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 items-center">
             <div>
               <h2 className="text-base text-red-600 font-semibold tracking-wide uppercase">Sneak Peek / Inside the Book</h2>
               <h3 className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900">Take a Look Inside</h3>
@@ -83,7 +83,7 @@ export default function HomePage() {
               </ul>
             </div>
             <div className="relative">
-              <div className="rounded-2xl overflow-hidden shadow-2xl">
+              <div className="rounded-2xl overflow-hidden shadow-2xl max-w-xl mx-auto lg:mx-0">
                 <img src="/contents.jpg" alt="Open spread mockup" className="w-full h-auto object-cover" />
               </div>
             </div>
@@ -92,11 +92,11 @@ export default function HomePage() {
       </section>
 
       {/* About the Book (Why It’s Unique) */}
-      <section className="py-20 bg-white">
+      <section className="py-16 sm:py-18 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gray-50 rounded-lg shadow-xl overflow-hidden">
             <div className="lg:grid lg:grid-cols-2">
-              <div className="p-12">
+              <div className="p-8 sm:p-10 lg:p-12">
                 <h2 className="text-base text-red-600 font-semibold tracking-wide uppercase">About the Book (Why It’s Unique)</h2>
                 <h3 className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900">Not Just Recipes. A Journey.</h3>
                 <p className="mt-4 text-gray-700">Sixth Sense Cooking isn’t just a cookbook—it’s a window into Dan’s world of experimenting, exploring ingredients, and finding inspiration through music.</p>
@@ -115,8 +115,8 @@ export default function HomePage() {
                   </li>
                 </ul>
               </div>
-              <div className="hidden lg:block p-8">
-                <div className="max-w-md xl:max-w-lg ml-auto">
+              <div className="hidden lg:block p-6 sm:p-8">
+                <div className="max-w-sm md:max-w-md xl:max-w-lg ml-auto">
                   <div className="polaroid rotate-[-2deg] shadow-xl">
                     <img className="h-full w-full object-cover" src="/cookbook3.png" alt="Open spread - polaroid style" />
                   </div>
@@ -132,11 +132,11 @@ export default function HomePage() {
 
 
       {/* Author Section */}
-      <section id="author" className="py-20 bg-white">
+      <section id="author" className="py-16 sm:py-18 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+          <div className="lg:grid lg:grid-cols-2 lg:gap-12 xl:gap-16 items-center">
             <div className="relative" data-aos="fade-right">
-              <div className="bg-white rounded-xl shadow-2xl p-4 w-full max-w-[360px] md:max-w-[400px] lg:max-w-[420px]">
+              <div className="bg-white rounded-xl shadow-2xl p-4 w-full max-w-[320px] sm:max-w-[360px] md:max-w-[400px] lg:max-w-[420px] mx-auto lg:mx-0">
                 <div className="relative aspect-[3/4]">
                   <img className="absolute inset-0 w-full h-full rounded-lg object-cover" src="/DanielWebb.png" alt="Daniel Webb" />
                 </div>
