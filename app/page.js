@@ -60,7 +60,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="order-1 lg:order-2" data-aos="fade-left">
-              <div className="rounded-2xl overflow-hidden shadow-2xl w-full max-w-[476px] lg:ml-auto">
+              <div className="rounded-2xl overflow-hidden shadow-2xl w-full max-w-[440px] md:max-w-[520px] lg:max-w-[476px] xl:max-w-[520px] lg:ml-auto">
                 <img src="/cookbook3.png" alt="Open spread mockup" className="w-full h-auto object-cover" />
               </div>
             </div>
@@ -116,7 +116,7 @@ export default function HomePage() {
                 </ul>
               </div>
               <div className="hidden lg:block p-8">
-                <div className="max-w-lg ml-auto">
+                <div className="max-w-md xl:max-w-lg ml-auto">
                   <div className="polaroid rotate-[-2deg] shadow-xl">
                     <img className="h-full w-full object-cover" src="/cookbook3.png" alt="Open spread - polaroid style" />
                   </div>
@@ -136,7 +136,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
             <div className="relative" data-aos="fade-right">
-              <div className="bg-white rounded-xl shadow-2xl p-4 max-w-[420px]">
+              <div className="bg-white rounded-xl shadow-2xl p-4 w-full max-w-[360px] md:max-w-[400px] lg:max-w-[420px]">
                 <div className="relative aspect-[3/4]">
                   <img className="absolute inset-0 w-full h-full rounded-lg object-cover" src="/DanielWebb.png" alt="Daniel Webb" />
                 </div>
