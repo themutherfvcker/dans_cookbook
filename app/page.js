@@ -129,70 +129,7 @@ export default function HomePage() {
 
 
 
-      {/* Recipe Preview Section */}
-      <section id="recipes" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:text-center" data-aos="fade-up">
-            <h2 className="text-base text-red-600 font-semibold tracking-wide uppercase">Featured Recipes</h2>
-            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">A Taste of What You'll Learn</p>
-            <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">These sample recipes showcase the intuitive approach taught in "Sixth Sense Cooking"</p>
-          </div>
 
-          <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            <div className="bg-white rounded-xl shadow-md overflow-hidden recipe-card transition duration-300" data-aos="fade-up" data-aos-delay="100">
-              <div className="polaroid">
-                <img className="h-48 w-full object-cover" src="/DansBookDedication.jpg" alt="Dedication page" />
-              </div>
-              <div className="p-8">
-                <div className="uppercase tracking-wide text-sm text-red-600 font-semibold">Pasta</div>
-                <h3 className="mt-2 text-xl font-semibold text-gray-900">Sensory Pasta Primavera</h3>
-                <p className="mt-3 text-gray-500">Learn to adjust ingredients based on seasonal vegetables and your personal taste preferences.</p>
-                <div className="mt-4 flex items-center">
-                  <i data-feather="clock" className="h-4 w-4 text-gray-400" />
-                  <span className="ml-2 text-sm text-gray-500">30-45 mins</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-md overflow-hidden recipe-card transition duration-300" data-aos="fade-up" data-aos-delay="200">
-              <div className="polaroid">
-                <img className="h-48 w-full object-cover" src="http://static.photos/food/600x400/2" alt="Intuitive Soup" />
-              </div>
-              <div className="p-8">
-                <div className="uppercase tracking-wide text-sm text-red-600 font-semibold">Soup</div>
-                <h3 className="mt-2 text-xl font-semibold text-gray-900">Instinctive Seasonal Soup</h3>
-                <p className="mt-3 text-gray-500">A master recipe that teaches you how to create delicious soups with whatever ingredients you have on hand.</p>
-                <div className="mt-4 flex items-center">
-                  <i data-feather="clock" className="h-4 w-4 text-gray-400" />
-                  <span className="ml-2 text-sm text-gray-500">45-60 mins</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-md overflow-hidden recipe-card transition duration-300" data-aos="fade-up" data-aos-delay="300">
-              <div className="polaroid">
-                <img className="h-48 w-full object-cover" src="http://static.photos/food/600x400/3" alt="Intuitive Roast" />
-              </div>
-              <div className="p-8">
-                <div className="uppercase tracking-wide text-sm text-red-600 font-semibold">Main Course</div>
-                <h3 className="mt-2 text-xl font-semibold text-gray-900">Perfectly Timed Roast</h3>
-                <p className="mt-3 text-gray-500">Master the art of cooking proteins to perfection by learning to trust your senses rather than strict timings.</p>
-                <div className="mt-4 flex items-center">
-                  <i data-feather="clock" className="h-4 w-4 text-gray-400" />
-                  <span className="ml-2 text-sm text-gray-500">1.5-3 hours</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-12 text-center" data-aos="fade-up">
-            <a href="#purchase" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700">
-              Get All 100+ Recipes
-              <i data-feather="arrow-right" className="ml-2" />
-            </a>
-          </div>
-        </div>
-      </section>
 
       {/* Author Section */}
       <section id="author" className="py-20 bg-white">
