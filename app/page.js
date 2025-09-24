@@ -84,7 +84,7 @@ export default function HomePage() {
             </div>
             <div className="relative">
               <div className="rounded-2xl overflow-hidden shadow-2xl">
-                <img src="/cookbook3.png" alt="Open spread mockup" className="w-full h-auto object-cover" />
+                <img src="/contents.jpg" alt="Open spread mockup" className="w-full h-auto object-cover" />
               </div>
             </div>
           </div>
