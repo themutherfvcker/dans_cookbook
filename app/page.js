@@ -60,10 +60,8 @@ export default function HomePage() {
               </div>
             </div>
             <div className="order-1 lg:order-2" data-aos="fade-left">
-              <div className="w-full max-w-[520px] lg:ml-auto shadow-2xl rounded-xl">
-                <div className="relative aspect-[3/4]">
-                  <img src="/DansCookbook.png" alt="Sixth Sense Cooking book" className="absolute inset-0 w-full h-full object-contain rounded-xl" />
-                </div>
+              <div className="rounded-2xl overflow-hidden shadow-2xl w-full max-w-[680px] lg:ml-auto">
+                <img src="/cookbook3.png" alt="Open spread mockup" className="w-full h-auto object-cover" />
               </div>
             </div>
           </div>
