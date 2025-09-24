@@ -54,6 +54,7 @@ export default function HomePage() {
             <div className="order-2 lg:order-1" data-aos="fade-right">
               <h1 className="text-4xl md:text-6xl font-bold text-gray-900">Sixth Sense Cooking</h1>
               <p className="mt-5 text-xl md:text-2xl text-gray-700 max-w-2xl">Unlock your culinary intuition with Daniel Webb's revolutionary approach to cooking</p>
+              <p className="mt-3 text-base md:text-lg text-gray-600 max-w-2xl">A cookbook that blends flavor, music, and creativity to take your cooking to the next level.</p>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300">Buy the Book - $29.99</a>
               </div>
