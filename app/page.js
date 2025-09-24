@@ -1,94 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
-import Script from "next/script";
+import { useState } from "react";
 
 export default function HomePage() {
-  useEffect(() => {
-    const AOS_HREF = "https://unpkg.com/aos@2.3.1/dist/aos.css";
-    if (!document.querySelector(`link[href="${AOS_HREF}"]`)) {
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = AOS_HREF;
-      document.head.appendChild(link);
-    }
-
-    const onReady = () => {
-      try {
-        if (window.AOS) window.AOS.init({ duration: 800, easing: "ease-in-out", once: true });
-        if (window.feather) window.feather.replace();
-
-        const button = document.getElementById("mobile-menu-button");
-        const menu = document.getElementById("mobile-menu");
-        if (button && menu) {
-          button.addEventListener("click", () => menu.classList.toggle("hidden"));
-        }
-
-        document.querySelectorAll('[id^="faq"]').forEach((faq) => {
-          const container = faq;
-          const trigger = container.previousElementSibling;
-          if (trigger) {
-            trigger.addEventListener("click", function () {
-              const icon = this.querySelector("i");
-              container.classList.toggle("hidden");
-              if (icon && window.feather) {
-                const isHidden = container.classList.contains("hidden");
-                icon.setAttribute("data-feather", isHidden ? "plus" : "minus");
-                window.feather.replace();
-              }
-            });
-          }
-        });
-
-        if (window.VANTA && document.getElementById("vanta-globe")) {
-          try {
-            window.VANTA.GLOBE({
-              el: "#vanta-globe",
-              mouseControls: true,
-              touchControls: true,
-              gyroControls: false,
-              minHeight: 200.0,
-              minWidth: 200.0,
-              scale: 1.0,
-              scaleMobile: 1.0,
-              color: 0xff3333,
-              backgroundColor: 0x0,
-              size: 0.8,
-            });
-          } catch {}
-        }
-      } catch {}
-    };
-
-    const t = setInterval(() => {
-      if (window.AOS && window.feather && window.VANTA) {
-        clearInterval(t);
-        onReady();
-      }
-    }, 200);
-    return () => clearInterval(t);
-  }, []);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <>
-      <Script src="https://cdn.tailwindcss.com" strategy="afterInteractive" />
-      <Script src="https://unpkg.com/aos@2.3.1/dist/aos.js" strategy="afterInteractive" />
-      <Script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js" strategy="afterInteractive" />
-      <Script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js" strategy="afterInteractive" />
-
-      <style>{`
-        .hero-bg {
-          background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('http://static.photos/food/1200x630/42');
-          background-size: cover;
-          background-position: center;
-        }
-        .recipe-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .floating { animation: floating 3s ease-in-out infinite; }
-        @keyframes floating { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
-      `}</style>
+      {/* Tailwind CSS is compiled; no runtime CDN */}
 
       {/* Navigation */}
       <nav className="bg-white shadow-lg sticky top-0 z-50 border-b border-[rgba(20,83,45,0.08)]">
@@ -108,15 +27,16 @@ export default function HomePage() {
               <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium">Buy Now</a>
             </div>
             <div className="-mr-2 flex items-center md:hidden">
-              <button type="button" className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500" aria-controls="mobile-menu" aria-expanded="false" id="mobile-menu-button">
-                <i data-feather="menu" />
+              <button type="button" onClick={() => setMobileOpen(!mobileOpen)} className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500" aria-controls="mobile-menu" aria-expanded={mobileOpen} id="mobile-menu-button">
+                <span className="sr-only">Toggle menu</span>
+                ☰
               </button>
             </div>
           </div>
         </div>
 
         {/* Mobile menu */}
-        <div className="hidden md:hidden" id="mobile-menu">
+        <div className={`${mobileOpen ? "block" : "hidden"} md:hidden`} id="mobile-menu">
           <div className="pt-2 pb-3 space-y-1">
             <a href="#about" className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">About</a>
             <a href="#recipes" className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Recipes</a>
