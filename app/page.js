@@ -187,8 +187,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
             <div className="relative" data-aos="fade-right">
-              <div className="bg-white rounded-xl shadow-2xl p-4">
-                <img className="w-full h-auto rounded-lg object-cover" src="/DansBackgound.png" alt="Daniel Webb" />
+              <div className="bg-white rounded-xl shadow-2xl p-4 max-w-[420px]">
+                <div className="relative aspect-[3/4]">
+                  <img className="absolute inset-0 w-full h-full rounded-lg object-cover" src="/DansBackgound.png" alt="Daniel Webb" />
+                </div>
               </div>
               <div className="mt-4">
                 <h3 className="text-xl font-bold text-gray-900">Daniel Webb</h3>
