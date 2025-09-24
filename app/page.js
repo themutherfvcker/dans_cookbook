@@ -128,7 +128,7 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <div id="vanta-globe" className="hero-bg min-h-screen flex items-center justify-center text-white relative overflow-hidden" style={{backgroundImage: "linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('http://static.photos/food/1200x630/42')"}}>
+      <div id="vanta-globe" className="hero-bg min-h-screen flex items-center justify-center text-white relative overflow-hidden" style={{backgroundImage: "linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('/DansBackgound.png')"}}>
         <div className="absolute inset-0" style={{background: "radial-gradient(ellipse at center, rgba(20,83,45,0.35), transparent 60%)"}} />
         <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8" data-aos="fade-up">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">Sixth Sense Cooking</h1>
@@ -211,7 +211,7 @@ export default function HomePage() {
                 </div>
                 <div className="hidden lg:block p-8">
                   <div className="polaroid">
-                    <img className="h-full w-full object-cover" src="http://static.photos/food/800x800/23" alt="Cookbook preview" />
+                    <img className="h-full w-full object-cover" src="/DansCookbook.png" alt="Sixth Sense Cooking book" />
                   </div>
                 </div>
               </div>
@@ -232,7 +232,7 @@ export default function HomePage() {
           <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             <div className="bg-white rounded-xl shadow-md overflow-hidden recipe-card transition duration-300" data-aos="fade-up" data-aos-delay="100">
               <div className="polaroid">
-                <img className="h-48 w-full object-cover" src="http://static.photos/food/600x400/1" alt="Intuitive Pasta" />
+                <img className="h-48 w-full object-cover" src="/DansBookDedication.jpg" alt="Dedication page" />
               </div>
               <div className="p-8">
                 <div className="uppercase tracking-wide text-sm text-red-600 font-semibold">Pasta</div>
