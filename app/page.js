@@ -70,6 +70,51 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* What's Inside the Book */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gray-50 rounded-lg shadow-xl overflow-hidden">
+            <div className="lg:grid lg:grid-cols-2">
+              <div className="p-12">
+                <h3 className="text-2xl font-bold text-gray-900">What's Inside the Book</h3>
+                <p className="mt-4 text-gray-600">"Sixth Sense Cooking" is more than just a cookbook—it's a culinary philosophy. Daniel Webb shares his decades of experience in professional kitchens and home cooking to help you develop an intuitive understanding of flavors, textures, and techniques.</p>
+                <div className="mt-8 space-y-4">
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0">
+                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span>
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-gray-700">Over 100 flexible recipes designed to build your intuition</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0">
+                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span>
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-gray-700">Sensory exercises to sharpen your taste, smell, and touch</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0">
+                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span>
+                    </div>
+                    <div className="ml-3">
+                      <p className="text-gray-700">Techniques for adapting recipes based on seasonal ingredients</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="hidden lg:block p-8">
+                <div className="polaroid rotate-[-2deg] shadow-xl">
+                  <img className="h-full w-full object-cover" src="/cookbook2.png" alt="Inside the book spread" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
 
 
       {/* Recipe Preview Section */}
