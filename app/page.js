@@ -47,7 +47,53 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* Hero Section */}
+       {/* Sixth Sense Cooking */}
+      <section className="relative overflow-hidden bg-cream">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 lg:py-20">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 items-center">
+            <div className="order-2 lg:order-1" data-aos="fade-right">
+              <h2 className="text-4xl md:text-6xl font-bold text-gray-900">Sixth Sense Cooking</h2>
+              <p className="mt-5 text-xl md:text-2xl text-gray-700 max-w-2xl">Unlock your culinary intuition with Daniel Webb's revolutionary approach to cooking</p>
+              <p className="mt-3 text-base md:text-lg text-gray-600 max-w-2xl">A cookbook that blends flavor, music, and creativity to take your cooking to the next level.</p>
+              <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300 w-full sm:w-auto text-center">Buy the Book - $29.99</a>
+              </div>
+            </div>
+            <div className="order-1 lg:order-2" data-aos="fade-left">
+              <div className="rounded-2xl overflow-hidden shadow-2xl w-full max-w-[320px] sm:max-w-[380px] md:max-w-[480px] lg:max-w-[520px] lg:ml-auto mx-auto">
+                <img src="/cookbook3.png" alt="Open spread mockup" className="w-full h-auto object-cover" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Dedication */}
+      <section className="py-16 bg-red-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <h2 className="text-3xl font-extrabold text-white">Dedication to Auntie Helen</h2>
+              <p className="mt-2 text-lg text-red-100">The hardest-working publican in Wheatley—and the spark behind this book.</p>
+              <p className="mt-6 text-red-50 leading-relaxed">
+                My Auntie Helen, who I’m dedicating this book to, owned pubs from a young age and to this day is the hardest working and most driven person I have ever met – and I’ve met a few. She ran a pub in the village of Wheatley called the Sun Inn. Wheatley is a sleepy yet bubbly little village in Oxfordshire. I love the way it all works and it has such a country feel but yet it’s so close to London.
+              </p>
+            </div>
+            <div>
+              <div className="relative rounded-xl overflow-hidden ring-1 ring-white/15 shadow-2xl h-[240px] sm:h-[300px] lg:h-[360px] w-full">
+                <img
+                  src="/DedicationInn.jpg"
+                  alt="Sun Inn, Wheatley"
+                  className="absolute inset-0 w-full h-full object-cover"
+                  style={{ objectPosition: "center 50%" }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+         {/* Not Just Recipes Section */}
       <section className="relative">
         <div className="relative w-full min-h-[420px] sm:min-h-[480px] lg:min-h-[620px]">
           <div
@@ -84,34 +130,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Dedication */}
-      <section className="py-16 bg-red-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div>
-              <h2 className="text-3xl font-extrabold text-white">Dedication to Auntie Helen</h2>
-              <p className="mt-2 text-lg text-red-100">The hardest-working publican in Wheatley—and the spark behind this book.</p>
-              <p className="mt-6 text-red-50 leading-relaxed">
-                My Auntie Helen, who I’m dedicating this book to, owned pubs from a young age and to this day is the hardest working and most driven person I have ever met – and I’ve met a few. She ran a pub in the village of Wheatley called the Sun Inn. Wheatley is a sleepy yet bubbly little village in Oxfordshire. I love the way it all works and it has such a country feel but yet it’s so close to London.
-              </p>
-            </div>
-            <div>
-              <div className="relative rounded-xl overflow-hidden ring-1 ring-white/15 shadow-2xl h-[240px] sm:h-[300px] lg:h-[360px] w-full">
-                <img
-                  src="/DedicationInn.jpg"
-                  alt="Sun Inn, Wheatley"
-                  className="absolute inset-0 w-full h-full object-cover"
-                  style={{ objectPosition: "center 50%" }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      
+      </section>  
 
       
 
@@ -121,26 +140,7 @@ export default function HomePage() {
 
 
 
-      {/* Classic Hero (restored) */}
-      <section className="relative overflow-hidden bg-cream">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 lg:py-20">
-          <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 items-center">
-            <div className="order-2 lg:order-1" data-aos="fade-right">
-              <h2 className="text-4xl md:text-6xl font-bold text-gray-900">Sixth Sense Cooking</h2>
-              <p className="mt-5 text-xl md:text-2xl text-gray-700 max-w-2xl">Unlock your culinary intuition with Daniel Webb's revolutionary approach to cooking</p>
-              <p className="mt-3 text-base md:text-lg text-gray-600 max-w-2xl">A cookbook that blends flavor, music, and creativity to take your cooking to the next level.</p>
-              <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300 w-full sm:w-auto text-center">Buy the Book - $29.99</a>
-              </div>
-            </div>
-            <div className="order-1 lg:order-2" data-aos="fade-left">
-              <div className="rounded-2xl overflow-hidden shadow-2xl w-full max-w-[320px] sm:max-w-[380px] md:max-w-[480px] lg:max-w-[520px] lg:ml-auto mx-auto">
-                <img src="/cookbook3.png" alt="Open spread mockup" className="w-full h-auto object-cover" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* Author Section */}
       <section id="author" className="py-16 sm:py-18 lg:py-20 bg-white">
@@ -345,30 +345,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Newsletter Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-xl shadow-xl overflow-hidden">
-            <div className="lg:grid lg:grid-cols-2">
-              <div className="p-12">
-                <h3 className="text-2xl font-bold text-gray-900">Join Our Culinary Community</h3>
-                <p className="mt-4 text-gray-600">Sign up for Daniel's newsletter to receive exclusive cooking tips, recipe variations, and updates about upcoming events and workshops.</p>
-                <form className="mt-8 sm:flex">
-                  <label htmlFor="email-address" className="sr-only">Email address</label>
-                  <input id="email-address" name="email" type="email" autoComplete="email" required className="w-full px-5 py-3 placeholder-gray-500 focus:ring-red-500 focus:border-red-500 sm:max-w-xs border-gray-300 rounded-md" placeholder="Enter your email" />
-                  <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3 sm:flex-shrink-0">
-                    <button type="submit" className="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Subscribe</button>
-                  </div>
-                </form>
-                <p className="mt-3 text-sm text-gray-500">We respect your privacy. Unsubscribe at any time.</p>
-              </div>
-              <div className="hidden lg:block">
-                <img className="h-full w-full object-cover" src="http://static.photos/food/800x800/45" alt="Cooking ingredients" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white">
@@ -413,24 +389,20 @@ export default function HomePage() {
                   <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">Contact</h3>
                   <ul className="mt-4 space-y-4">
                     <li><a href="mailto:info@sixthsensecooking.com" className="text-base text-gray-300 hover:text-white">info@sixthsensecooking.com</a></li>
-                    <li><a href="tel:+18005551234" className="text-base text-gray-300 hover:text-white">(800) 555-1234</a></li>
-                    <li><p className="text-base text-gray-300">P.O. Box 1234<br />Culinary City, CA 90210</p></li>
+      
                   </ul>
                 </div>
                 <div className="mt-12 md:mt-0">
                   <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">Quick Links</h3>
                   <ul className="mt-4 space-y-4">
-                    <li><a href="#" className="text-base text-gray-300 hover:text-white">Blog</a></li>
-                    <li><a href="#" className="text-base text-gray-300 hover:text-white">Cooking Classes</a></li>
-                    <li><a href="#" className="text-base text-gray-300 hover:text-white">Wholesale Inquiries</a></li>
-                    <li><a href="#" className="text-base text-gray-300 hover:text-white">Press Kit</a></li>
+                
                   </ul>
                 </div>
               </div>
             </div>
           </div>
           <div className="mt-12 border-t border-gray-800 pt-8">
-            <p className="text-base text-gray-400 text-center">&copy; 2023 Sixth Sense Cooking. All rights reserved.</p>
+            <p className="text-base text-gray-400 text-center">&copy; 2025 Sixth Sense Cooking. All rights reserved.</p>
           </div>
         </div>
       </footer>
