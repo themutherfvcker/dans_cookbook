@@ -99,7 +99,6 @@ export default function HomePage() {
               backgroundPosition: "center 40%",
             }}
           />
-          <div className="absolute inset-0 bg-black/40" />
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
             <div className="max-w-2xl">
               <div className="inline-block rounded-xl bg-black/55 backdrop-blur-sm p-6 sm:p-8 shadow-lg">
