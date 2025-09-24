@@ -116,6 +116,27 @@ export default function HomePage() {
 
 
 
+      {/* Classic Hero (restored) */}
+      <section className="relative overflow-hidden bg-cream">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 lg:py-20">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 items-center">
+            <div className="order-2 lg:order-1" data-aos="fade-right">
+              <h2 className="text-4xl md:text-6xl font-bold text-gray-900">Sixth Sense Cooking</h2>
+              <p className="mt-5 text-xl md:text-2xl text-gray-700 max-w-2xl">Unlock your culinary intuition with Daniel Webb's revolutionary approach to cooking</p>
+              <p className="mt-3 text-base md:text-lg text-gray-600 max-w-2xl">A cookbook that blends flavor, music, and creativity to take your cooking to the next level.</p>
+              <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300">Buy the Book - $29.99</a>
+              </div>
+            </div>
+            <div className="order-1 lg:order-2" data-aos="fade-left">
+              <div className="rounded-2xl overflow-hidden shadow-2xl w-full max-w-[440px] md:max-w-[520px] lg:max-w-[476px] xl:max-w-[520px] lg:ml-auto mx-auto">
+                <img src="/cookbook3.png" alt="Open spread mockup" className="w-full h-auto object-cover" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Author Section */}
       <section id="author" className="py-16 sm:py-18 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
