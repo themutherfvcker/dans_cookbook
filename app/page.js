@@ -70,44 +70,38 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* What's Inside the Book */}
+      {/* About the Book (Why It’s Unique) */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gray-50 rounded-lg shadow-xl overflow-hidden">
             <div className="lg:grid lg:grid-cols-2">
               <div className="p-12">
-                <h3 className="text-2xl font-bold text-gray-900">What's Inside the Book</h3>
-                <p className="mt-4 text-gray-600">"Sixth Sense Cooking" is more than just a cookbook—it's a culinary philosophy. Daniel Webb shares his decades of experience in professional kitchens and home cooking to help you develop an intuitive understanding of flavors, textures, and techniques.</p>
-                <div className="mt-8 space-y-4">
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0">
-                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span>
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-gray-700">Over 100 flexible recipes designed to build your intuition</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0">
-                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span>
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-gray-700">Sensory exercises to sharpen your taste, smell, and touch</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0">
-                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span>
-                    </div>
-                    <div className="ml-3">
-                      <p className="text-gray-700">Techniques for adapting recipes based on seasonal ingredients</p>
-                    </div>
-                  </div>
-                </div>
+                <h2 className="text-base text-red-600 font-semibold tracking-wide uppercase">About the Book (Why It’s Unique)</h2>
+                <h3 className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900">Not Just Recipes. A Journey.</h3>
+                <p className="mt-4 text-gray-700">Sixth Sense Cooking isn’t just a cookbook—it’s a window into Dan’s world of experimenting, exploring ingredients, and finding inspiration through music.</p>
+                <ul className="mt-6 space-y-3">
+                  <li className="flex items-start">
+                    <span className="mt-1 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span>
+                    <span className="text-gray-800">120+ pages of recipes, tips, and stories</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="mt-1 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span>
+                    <span className="text-gray-800">Webby’s Hot Tips with every dish</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="mt-1 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span>
+                    <span className="text-gray-800">Inspired by songs that shaped each recipe</span>
+                  </li>
+                </ul>
               </div>
               <div className="hidden lg:block p-8">
-                <div className="polaroid rotate-[-2deg] shadow-xl">
-                  <img className="h-full w-full object-cover" src="/cookbook3.png" alt="Inside the book spread" />
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="polaroid rotate-[-3deg] shadow-xl">
+                    <img className="h-full w-full object-cover" src="/cookbook3.png" alt="Barbecue - polaroid style" />
+                  </div>
+                  <div className="polaroid rotate-[2deg] shadow-xl">
+                    <img className="h-full w-full object-cover" src="/DansBookDedication.jpg" alt="Auntie Helen’s pub - polaroid style" />
+                  </div>
                 </div>
               </div>
             </div>
