@@ -98,8 +98,13 @@ export default function HomePage() {
               </p>
             </div>
             <div>
-              <div className="rounded-xl bg-white/10 ring-1 ring-white/15 h-[240px] sm:h-[300px] lg:h-[360px] w-full flex items-center justify-center text-white/70">
-                Image placeholder
+              <div className="relative rounded-xl overflow-hidden ring-1 ring-white/15 shadow-2xl h-[240px] sm:h-[300px] lg:h-[360px] w-full">
+                <img
+                  src="/DedicationInn.jpg"
+                  alt="Sun Inn, Wheatley"
+                  className="absolute inset-0 w-full h-full object-cover"
+                  style={{ objectPosition: "center 50%" }}
+                />
               </div>
             </div>
           </div>
