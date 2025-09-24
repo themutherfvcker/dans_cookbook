@@ -189,7 +189,7 @@ export default function HomePage() {
             <div className="relative" data-aos="fade-right">
               <div className="bg-white rounded-xl shadow-2xl p-4 max-w-[420px]">
                 <div className="relative aspect-[3/4]">
-                  <img className="absolute inset-0 w-full h-full rounded-lg object-cover" src="/DansBackgound.png" alt="Daniel Webb" />
+                  <img className="absolute inset-0 w-full h-full rounded-lg object-cover" src="/DanielWebb.png" alt="Daniel Webb" />
                 </div>
               </div>
               <div className="mt-4">
