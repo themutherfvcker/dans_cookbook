@@ -106,7 +106,7 @@ export default function HomePage() {
               </div>
               <div className="hidden lg:block p-8">
                 <div className="polaroid rotate-[-2deg] shadow-xl">
-                  <img className="h-full w-full object-cover" src="/cookbook2.png" alt="Inside the book spread" />
+                  <img className="h-full w-full object-cover" src="/cookbook3.png" alt="Inside the book spread" />
                 </div>
               </div>
             </div>
