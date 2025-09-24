@@ -87,7 +87,7 @@ export default function HomePage() {
       </section>
 
       {/* Dedication */}
-      <section className="py-16 bg-red-600/90">
+      <section className="py-16 bg-red-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8 items-center">
             <div>
