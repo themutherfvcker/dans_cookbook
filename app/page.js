@@ -225,7 +225,7 @@ export default function HomePage() {
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
             <div className="relative" data-aos="fade-right">
               <div className="relative rounded-xl overflow-hidden shadow-2xl floating">
-                <img className="w-full h-auto" src="http://static.photos/food/600x800/44" alt="Sixth Sense Cooking Book" />
+                <img className="w-full h-auto" src="/DanBehindBookKitchen.png" alt="Sixth Sense Cooking Book" />
               </div>
             </div>
             <div className="mt-10 lg:mt-0 text-white" data-aos="fade-left">
