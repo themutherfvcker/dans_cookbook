@@ -60,8 +60,10 @@ export default function HomePage() {
               </div>
             </div>
             <div className="order-1 lg:order-2" data-aos="fade-left">
-              <div className="polaroid max-w-md lg:ml-auto">
-                <img src="/DansCookbook.png" alt="Sixth Sense Cooking book" className="w-full h-auto object-contain" />
+              <div className="polaroid w-full max-w-[420px] lg:ml-auto">
+                <div className="relative aspect-[1/1]">
+                  <img src="/DansCookbook.png" alt="Sixth Sense Cooking book" className="absolute inset-0 w-full h-full object-cover" />
+                </div>
               </div>
             </div>
           </div>
