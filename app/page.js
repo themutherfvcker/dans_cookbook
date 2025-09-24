@@ -92,21 +92,21 @@ export default function HomePage() {
           <div className="bg-gray-50 rounded-lg shadow-xl overflow-hidden">
             <div className="lg:grid lg:grid-cols-2">
               <div className="p-8 sm:p-10 lg:p-12">
-                <h2 className="text-base text-red-600 font-semibold tracking-wide uppercase">About the Book (Why It’s Unique)</h2>
-                <h3 className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900">Not Just Recipes. A Journey.</h3>
-                <p className="mt-4 text-gray-700">Sixth Sense Cooking isn’t just a cookbook—it’s a window into Dan’s world of experimenting, exploring ingredients, and finding inspiration through music.</p>
-                <ul className="mt-6 space-y-3">
+                <h2 className="text-sm sm:text-base text-red-600 font-semibold tracking-wider uppercase">About the Book (Why It’s Unique)</h2>
+                <h3 className="mt-2 text-3xl sm:text-4xl md:text-5xl leading-tight font-extrabold tracking-tight text-gray-900">Not Just Recipes. A Journey.</h3>
+                <p className="mt-5 text-base sm:text-lg md:text-xl text-gray-700 max-w-2xl">Sixth Sense Cooking isn’t just a cookbook—it’s a window into Dan’s world of experimenting, exploring ingredients, and finding inspiration through music.</p>
+                <ul className="mt-7 space-y-3">
                   <li className="flex items-start">
-                    <span className="mt-1 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span>
-                    <span className="text-gray-800">120+ pages of recipes, tips, and stories</span>
+                    <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span>
+                    <span className="text-gray-900 text-base sm:text-lg">120+ pages of recipes, tips, and stories</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="mt-1 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span>
-                    <span className="text-gray-800">Webby’s Hot Tips with every dish</span>
+                    <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span>
+                    <span className="text-gray-900 text-base sm:text-lg">Webby’s Hot Tips with every dish</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="mt-1 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span>
-                    <span className="text-gray-800">Inspired by songs that shaped each recipe</span>
+                    <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span>
+                    <span className="text-gray-900 text-base sm:text-lg">Inspired by songs that shaped each recipe</span>
                   </li>
                 </ul>
               </div>
