@@ -291,7 +291,7 @@ export default function HomePage() {
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
             <div className="relative" data-aos="fade-right">
               <div className="relative rounded-xl overflow-hidden shadow-xl">
-                <img className="w-full h-auto" src="http://static.photos/people/600x800/10" alt="Daniel Webb" />
+                <img className="w-full h-auto" src="/DansBackgound.png" alt="Daniel Webb" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90" />
                 <div className="absolute bottom-0 left-0 p-6">
                   <h3 className="text-xl font-bold text-white">Daniel Webb</h3>
