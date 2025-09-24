@@ -56,7 +56,6 @@ export default function HomePage() {
               <p className="mt-5 text-xl md:text-2xl text-gray-700 max-w-2xl">Unlock your culinary intuition with Daniel Webb's revolutionary approach to cooking</p>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300">Buy the Book - $29.99</a>
-                <a href="#recipes" className="bg-white hover:bg-gray-100 text-gray-800 px-8 py-4 rounded-md text-lg font-semibold transition duration-300">Explore Recipes</a>
               </div>
             </div>
             <div className="order-1 lg:order-2" data-aos="fade-left">
