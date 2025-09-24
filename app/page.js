@@ -68,6 +68,26 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Dedication */}
+      <section className="py-16 bg-red-600/90">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <h2 className="text-3xl font-extrabold text-white">Dedication to Auntie Helen</h2>
+              <p className="mt-2 text-lg text-red-100">The hardest-working publican in Wheatley—and the spark behind this book.</p>
+              <p className="mt-6 text-red-50 leading-relaxed">
+                My Auntie Helen, who I’m dedicating this book to, owned pubs from a young age and to this day is the hardest working and most driven person I have ever met – and I’ve met a few. She ran a pub in the village of Wheatley called the Sun Inn. Wheatley is a sleepy yet bubbly little village in Oxfordshire. I love the way it all works and it has such a country feel but yet it’s so close to London.
+              </p>
+            </div>
+            <div>
+              <div className="rounded-xl bg-white/10 ring-1 ring-white/15 h-[240px] sm:h-[300px] lg:h-[360px] w-full flex items-center justify-center text-white/70">
+                Image placeholder
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Full-width background image section */}
       <section className="relative">
         <div className="relative w-full min-h-[320px] sm:min-h-[420px] lg:min-h-[560px]">
