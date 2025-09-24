@@ -60,7 +60,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="order-1 lg:order-2" data-aos="fade-left">
-              <div className="rounded-2xl overflow-hidden shadow-2xl w-full max-w-[680px] lg:ml-auto">
+              <div className="rounded-2xl overflow-hidden shadow-2xl w-full max-w-[476px] lg:ml-auto">
                 <img src="/cookbook3.png" alt="Open spread mockup" className="w-full h-auto object-cover" />
               </div>
             </div>
