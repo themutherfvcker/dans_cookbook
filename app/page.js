@@ -97,7 +97,7 @@ export default function HomePage() {
               <div className="hidden lg:block p-6 sm:p-8">
                 <div className="max-w-sm md:max-w-md xl:max-w-lg ml-auto">
                   <div className="polaroid rotate-[-2deg] shadow-xl">
-                    <img className="h-full w-full object-cover" src="/cookbook3.png" alt="Open spread - polaroid style" />
+                    <img className="h-full w-full object-cover" src="/DanHoldingBookKitchen.png" alt="Dan holding the book in the kitchen" />
                   </div>
                 </div>
               </div>
