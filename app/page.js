@@ -214,6 +214,7 @@ export default function HomePage() {
               <p className="mt-4 text-lg text-gray-600">Daniel Webb has spent over 20 years in professional kitchens around the world, from Michelin-starred restaurants to humble street food stalls. His journey led him to develop a unique approach to cooking that emphasizes intuition over rigid recipes.</p>
               <p className="mt-4 text-lg text-gray-600">After teaching cooking classes for a decade, Daniel realized that the most successful cooks weren't those who followed recipes perfectly, but those who learned to trust their senses and adapt creatively.</p>
               <p className="mt-4 text-lg text-gray-600">"Sixth Sense Cooking" distills Daniel's philosophy into an accessible system that anyone can use to become a more confident, creative cook.</p>
+              <p className="mt-4 text-lg text-gray-600">Born and raised in the Cotswolds, inspired by family, pubs, and community, Dan grew into a chef passionate about giving ingredients a stage. His cooking is guided by honesty, music, and creativity—values that run through this book.</p>
               <div className="mt-8 flex space-x-4">
                 <a href="#" className="text-red-600 hover:text-red-700"><i data-feather="instagram" className="h-6 w-6" /></a>
                 <a href="#" className="text-red-600 hover:text-red-700"><i data-feather="twitter" className="h-6 w-6" /></a>
