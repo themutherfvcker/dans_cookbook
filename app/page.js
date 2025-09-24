@@ -224,8 +224,13 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
             <div className="relative" data-aos="fade-right">
-              <div className="relative rounded-xl overflow-hidden shadow-2xl floating">
-                <img className="w-full h-auto" src="/DanBehindBookKitchen.png" alt="Sixth Sense Cooking Book" />
+              <div className="relative rounded-xl overflow-hidden shadow-2xl floating h-[360px] sm:h-[460px] lg:h-[520px]">
+                <img
+                  className="absolute inset-0 w-full h-full object-cover"
+                  src="/DanBehindBookKitchen.png"
+                  alt="Sixth Sense Cooking Book"
+                  style={{ objectPosition: "center 35%" }}
+                />
               </div>
             </div>
             <div className="mt-10 lg:mt-0 text-white" data-aos="fade-left">
