@@ -68,6 +68,22 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Full-width background image section */}
+      <section className="relative">
+        <div className="relative w-full min-h-[320px] sm:min-h-[420px] lg:min-h-[560px]">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: "url('/DanHoldingBookKitchen.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center 40%",
+            }}
+          />
+          <div className="absolute inset-0 bg-black/20" />
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"></div>
+        </div>
+      </section>
+
       
 
       {/* About the Book (Why It’s Unique) */}
