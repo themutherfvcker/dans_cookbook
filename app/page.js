@@ -47,21 +47,39 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-cream">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 lg:py-20">
-          <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 items-center">
-            <div className="order-2 lg:order-1" data-aos="fade-right">
-              <h1 className="text-4xl md:text-6xl font-bold text-gray-900">Sixth Sense Cooking</h1>
-              <p className="mt-5 text-xl md:text-2xl text-gray-700 max-w-2xl">Unlock your culinary intuition with Daniel Webb's revolutionary approach to cooking</p>
-              <p className="mt-3 text-base md:text-lg text-gray-600 max-w-2xl">A cookbook that blends flavor, music, and creativity to take your cooking to the next level.</p>
-              <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300">Buy the Book - $29.99</a>
-              </div>
-            </div>
-            <div className="order-1 lg:order-2" data-aos="fade-left">
-              <div className="rounded-2xl overflow-hidden shadow-2xl w-full max-w-[440px] md:max-w-[520px] lg:max-w-[476px] xl:max-w-[520px] lg:ml-auto mx-auto">
-                <img src="/cookbook3.png" alt="Open spread mockup" className="w-full h-auto object-cover" />
+      {/* Hero Section - Full-width background with About the Book copy */}
+      <section className="relative">
+        <div className="relative w-full min-h-[420px] lg:min-h-[620px]">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: "url('/DanHoldingBookKitchen.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center 40%",
+            }}
+          />
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+            <div className="max-w-2xl">
+              <div className="inline-block rounded-xl bg-black/55 backdrop-blur-sm p-6 sm:p-8 shadow-lg">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl leading-tight font-extrabold tracking-tight text-white">Not Just Recipes. A Journey.</h1>
+                <p className="mt-5 text-base sm:text-lg md:text-xl text-red-100">Sixth Sense Cooking isn’t just a cookbook—it’s a window into Dan’s world of experimenting, exploring ingredients, and finding inspiration through music.</p>
+                <ul className="mt-7 space-y-3">
+                  <li className="flex items-start">
+                    <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
+                    <span className="text-white text-base sm:text-lg">120+ pages of recipes, tips, and stories</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
+                    <span className="text-white text-base sm:text-lg">Webby’s Hot Tips with every dish</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
+                    <span className="text-white text-base sm:text-lg">Inspired by songs that shaped each recipe</span>
+                  </li>
+                </ul>
+                <div className="mt-8">
+                  <a href="#purchase" className="inline-block bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md text-base font-semibold transition duration-300">Buy the Book - $29.99</a>
+                </div>
               </div>
             </div>
           </div>
@@ -88,42 +106,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Full-width background image section with About the Book copy */}
-      <section className="relative">
-        <div className="relative w-full min-h-[420px] lg:min-h-[620px]">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: "url('/DanHoldingBookKitchen.png')",
-              backgroundSize: "cover",
-              backgroundPosition: "center 40%",
-            }}
-          />
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-            <div className="max-w-2xl">
-              <div className="inline-block rounded-xl bg-black/55 backdrop-blur-sm p-6 sm:p-8 shadow-lg">
-                <h2 className="text-sm sm:text-base text-red-200 font-semibold tracking-wider uppercase">About the Book (Why It’s Unique)</h2>
-                <h3 className="mt-2 text-3xl sm:text-4xl md:text-5xl leading-tight font-extrabold tracking-tight text-white">Not Just Recipes. A Journey.</h3>
-                <p className="mt-5 text-base sm:text-lg md:text-xl text-red-100">Sixth Sense Cooking isn’t just a cookbook—it’s a window into Dan’s world of experimenting, exploring ingredients, and finding inspiration through music.</p>
-                <ul className="mt-7 space-y-3">
-                  <li className="flex items-start">
-                    <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
-                    <span className="text-white text-base sm:text-lg">120+ pages of recipes, tips, and stories</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
-                    <span className="text-white text-base sm:text-lg">Webby’s Hot Tips with every dish</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
-                    <span className="text-white text-base sm:text-lg">Inspired by songs that shaped each recipe</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       
 
