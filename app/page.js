@@ -128,17 +128,25 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <div id="vanta-globe" className="hero-bg min-h-screen flex items-center justify-center text-white relative overflow-hidden" style={{backgroundImage: "linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('/DansBackgound.png')"}}>
-        <div className="absolute inset-0" style={{background: "radial-gradient(ellipse at center, rgba(20,83,45,0.35), transparent 60%)"}} />
-        <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8" data-aos="fade-up">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">Sixth Sense Cooking</h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Unlock your culinary intuition with Daniel Webb's revolutionary approach to cooking</p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300">Buy the Book - $29.99</a>
-            <a href="#recipes" className="bg-white hover:bg-gray-100 text-gray-800 px-8 py-4 rounded-md text-lg font-semibold transition duration-300">Explore Recipes</a>
+      <section className="relative overflow-hidden bg-cream">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-24">
+          <div className="grid lg:grid-cols-2 gap-10 items-center">
+            <div className="order-2 lg:order-1" data-aos="fade-right">
+              <h1 className="text-4xl md:text-6xl font-bold text-gray-900">Sixth Sense Cooking</h1>
+              <p className="mt-5 text-xl md:text-2xl text-gray-700 max-w-2xl">Unlock your culinary intuition with Daniel Webb's revolutionary approach to cooking</p>
+              <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300">Buy the Book - $29.99</a>
+                <a href="#recipes" className="bg-white hover:bg-gray-100 text-gray-800 px-8 py-4 rounded-md text-lg font-semibold transition duration-300">Explore Recipes</a>
+              </div>
+            </div>
+            <div className="order-1 lg:order-2" data-aos="fade-left">
+              <div className="polaroid max-w-md lg:ml-auto">
+                <img src="/DansCookbook.png" alt="Sixth Sense Cooking book" className="w-full h-auto object-contain" />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* About Section */}
       <section id="about" className="py-20 bg-cream">
