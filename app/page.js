@@ -68,28 +68,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Sneak Peek / Inside the Book */}
-      <section className="py-16 sm:py-18 lg:py-20 bg-cream">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 items-center">
-            <div>
-              <h2 className="text-base text-red-600 font-semibold tracking-wide uppercase">Sneak Peek / Inside the Book</h2>
-              <h3 className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900">Take a Look Inside</h3>
-              <p className="mt-4 text-gray-700">From quick dressings to hearty mains, from sauces to sweets—this book covers it all.</p>
-              <ul className="mt-6 space-y-3">
-                <li className="flex items-start"><span className="mt-1 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span><span>Foreword preview</span></li>
-                <li className="flex items-start"><span className="mt-1 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span><span>Full contents table</span></li>
-                <li className="flex items-start"><span className="mt-1 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white text-xs">✓</span><span>Sample recipe spread</span></li>
-              </ul>
-            </div>
-            <div className="relative">
-              <div className="rounded-2xl overflow-hidden shadow-2xl max-w-xl mx-auto lg:mx-0">
-                <img src="/contents.jpg" alt="Open spread mockup" className="w-full h-auto object-cover" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       {/* About the Book (Why It’s Unique) */}
       <section className="py-16 sm:py-18 lg:py-20 bg-white">
