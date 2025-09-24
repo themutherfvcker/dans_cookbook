@@ -60,7 +60,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="order-1 lg:order-2" data-aos="fade-left">
-              <div className="polaroid w-full max-w-[420px] lg:ml-auto">
+              <div className="polaroid w-full max-w-[420px] lg:ml-auto rotate-[-3deg] shadow-xl transition-transform duration-300 will-change-transform hover:rotate-[-1deg]">
                 <div className="relative aspect-[1/1]">
                   <img src="/DansCookbook.png" alt="Sixth Sense Cooking book" className="absolute inset-0 w-full h-full object-cover" />
                 </div>
