@@ -47,7 +47,7 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* Hero Section - Full-width background with About the Book copy */}
+      {/* Hero Section */}
       <section className="relative">
         <div className="relative w-full min-h-[420px] sm:min-h-[480px] lg:min-h-[620px]">
           <div
