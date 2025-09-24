@@ -102,23 +102,25 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-black/40" />
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
             <div className="max-w-2xl">
-              <h2 className="text-sm sm:text-base text-red-200 font-semibold tracking-wider uppercase">About the Book (Why It’s Unique)</h2>
-              <h3 className="mt-2 text-3xl sm:text-4xl md:text-5xl leading-tight font-extrabold tracking-tight text-white">Not Just Recipes. A Journey.</h3>
-              <p className="mt-5 text-base sm:text-lg md:text-xl text-red-100">Sixth Sense Cooking isn’t just a cookbook—it’s a window into Dan’s world of experimenting, exploring ingredients, and finding inspiration through music.</p>
-              <ul className="mt-7 space-y-3">
-                <li className="flex items-start">
-                  <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
-                  <span className="text-white text-base sm:text-lg">120+ pages of recipes, tips, and stories</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
-                  <span className="text-white text-base sm:text-lg">Webby’s Hot Tips with every dish</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
-                  <span className="text-white text-base sm:text-lg">Inspired by songs that shaped each recipe</span>
-                </li>
-              </ul>
+              <div className="inline-block rounded-xl bg-black/55 backdrop-blur-sm p-6 sm:p-8 shadow-lg">
+                <h2 className="text-sm sm:text-base text-red-200 font-semibold tracking-wider uppercase">About the Book (Why It’s Unique)</h2>
+                <h3 className="mt-2 text-3xl sm:text-4xl md:text-5xl leading-tight font-extrabold tracking-tight text-white">Not Just Recipes. A Journey.</h3>
+                <p className="mt-5 text-base sm:text-lg md:text-xl text-red-100">Sixth Sense Cooking isn’t just a cookbook—it’s a window into Dan’s world of experimenting, exploring ingredients, and finding inspiration through music.</p>
+                <ul className="mt-7 space-y-3">
+                  <li className="flex items-start">
+                    <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
+                    <span className="text-white text-base sm:text-lg">120+ pages of recipes, tips, and stories</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
+                    <span className="text-white text-base sm:text-lg">Webby’s Hot Tips with every dish</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
+                    <span className="text-white text-base sm:text-lg">Inspired by songs that shaped each recipe</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
