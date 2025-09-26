@@ -24,6 +24,7 @@ export default function HomePage() {
               <a href="#recipes" className="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium">Recipes</a>
               <a href="#author" className="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium">Author</a>
               <a href="#testimonials" className="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium">Testimonials</a>
+              <a href="/pricing" className="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium">Pricing</a>
               <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium">Buy Now</a>
             </div>
             <div className="-mr-2 flex items-center md:hidden">
@@ -42,6 +43,7 @@ export default function HomePage() {
             <a href="#recipes" className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Recipes</a>
             <a href="#author" className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Author</a>
             <a href="#testimonials" className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Testimonials</a>
+            <a href="/pricing" className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Pricing</a>
             <a href="#purchase" className="block px-3 py-2 text-base font-medium text-white bg-red-600 hover:bg-red-700">Buy Now</a>
           </div>
         </div>
@@ -395,7 +397,7 @@ export default function HomePage() {
                 <div className="mt-12 md:mt-0">
                   <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">Quick Links</h3>
                   <ul className="mt-4 space-y-4">
-                
+                    <li><a href="/pricing" className="text-base text-gray-300 hover:text-white">Pricing</a></li>
                   </ul>
                 </div>
               </div>
