@@ -154,10 +154,9 @@ export default function HomePage() {
             className="absolute inset-0"
             style={{
               backgroundImage: "url('/DanHoldingBookKitchen.png')",
-              backgroundSize: "contain",
-              backgroundPosition: "center",
+              backgroundSize: "cover",
+              backgroundPosition: "center 35%",
               backgroundRepeat: "no-repeat",
-              backgroundColor: "#000",
             }}
           />
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-24">
