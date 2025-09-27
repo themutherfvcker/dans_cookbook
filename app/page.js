@@ -147,58 +147,52 @@ export default function HomePage() {
         </div>
       </section>
 
-         {/* Not Just Recipes Section */}
+      {/* Not Just Recipes Section */}
       <section className="relative">
-        <div className="relative w-full min-h-[420px] sm:min-h-[480px] lg:min-h-[620px]">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: "url('/DanHoldingBookKitchen.png')",
-              backgroundSize: "cover",
-              backgroundPosition: "center 35%",
-              backgroundRepeat: "no-repeat",
-            }}
-          />
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-24">
-            <div className="max-w-2xl text-center lg:text-left">
-              <div className="inline-block rounded-xl bg-black/55 backdrop-blur-sm p-6 sm:p-8 shadow-lg mx-auto lg:mx-0">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl leading-tight font-extrabold tracking-tight text-white">Not Just Recipes. A Journey.</h1>
-                <p className="mt-5 text-base sm:text-lg md:text-xl text-red-100">Sixth Sense Cooking isn’t just a cookbook—it’s a window into Dan’s world of experimenting, exploring ingredients, and finding inspiration through music.</p>
-                <ul className="mt-7 space-y-3">
-                  <li className="flex items-start">
-                    <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
-                    <span className="text-white text-base sm:text-lg">120+ pages of recipes, tips, and stories</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
-                    <span className="text-white text-base sm:text-lg">Webby’s Hot Tips with every dish</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
-                    <span className="text-white text-base sm:text-lg">Inspired by songs that shaped each recipe</span>
-                  </li>
-                </ul>
-                <div className="mt-8">
-                  <button
-                    onClick={async () => {
-                      try { const resp = await fetch('/api/session', { method: 'GET' }); await resp.json().catch(() => ({})) } catch {}
-                      try {
-                        const r = await fetch('/api/checkout/book', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
-                        const j = await r.json()
-                        if (!r.ok || !j?.url) throw new Error(j?.error || `HTTP ${r.status}`)
-                        window.location.href = j.url
-                      } catch (e) { alert(`Checkout failed: ${e?.message || e}`) }
-                    }}
-                    className="inline-block w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md text-base font-semibold transition duration-300"
-                  >
-                    Buy the Book - $29.99
-                  </button>
+        <div className="relative w-full">
+          <img src="/DanHoldingBookKitchen.png" alt="Dan holding the book in the kitchen" className="block w-full h-auto" />
+          <div className="absolute inset-0 z-10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-24">
+              <div className="max-w-2xl text-center lg:text-left">
+                <div className="inline-block rounded-xl bg-black/55 backdrop-blur-sm p-6 sm:p-8 shadow-lg mx-auto lg:mx-0">
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl leading-tight font-extrabold tracking-tight text-white">Not Just Recipes. A Journey.</h1>
+                  <p className="mt-5 text-base sm:text-lg md:text-xl text-red-100">Sixth Sense Cooking isn’t just a cookbook—it’s a window into Dan’s world of experimenting, exploring ingredients, and finding inspiration through music.</p>
+                  <ul className="mt-7 space-y-3">
+                    <li className="flex items-start">
+                      <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
+                      <span className="text-white text-base sm:text-lg">120+ pages of recipes, tips, and stories</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
+                      <span className="text-white text-base sm:text-lg">Webby’s Hot Tips with every dish</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="mt-0.5 mr-3 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white text-xs">✓</span>
+                      <span className="text-white text-base sm:text-lg">Inspired by songs that shaped each recipe</span>
+                    </li>
+                  </ul>
+                  <div className="mt-8">
+                    <button
+                      onClick={async () => {
+                        try { const resp = await fetch('/api/session', { method: 'GET' }); await resp.json().catch(() => ({})) } catch {}
+                        try {
+                          const r = await fetch('/api/checkout/book', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
+                          const j = await r.json()
+                          if (!r.ok || !j?.url) throw new Error(j?.error || `HTTP ${r.status}`)
+                          window.location.href = j.url
+                        } catch (e) { alert(`Checkout failed: ${e?.message || e}`) }
+                      }}
+                      className="inline-block w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md text-base font-semibold transition duration-300"
+                    >
+                      Buy the Book - $29.99
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </section>  
+      </section>
 
       
 
