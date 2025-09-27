@@ -1,6 +1,7 @@
 // app/api/checkout/book/route.js
 import { NextResponse } from 'next/server'
 import { cookies, headers } from 'next/headers'
+import { randomUUID } from 'crypto'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -17,9 +18,15 @@ async function createCheckoutSession(req) {
     }
 
     const jar = await cookies()
-    const uid = jar.get('uid')?.value
+    let uid = jar.get('uid')?.value
     if (!uid) {
-      return NextResponse.json({ ok: false, error: 'No uid; visit /api/session first' }, { status: 400 })
+      uid = randomUUID()
+      jar.set('uid', uid, {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 60 * 60 * 24 * 365,
+      })
     }
 
     const hdrs = await headers()
