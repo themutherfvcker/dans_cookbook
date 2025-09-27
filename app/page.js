@@ -149,10 +149,15 @@ export default function HomePage() {
 
       {/* Not Just Recipes Section */}
       <section className="relative">
-        <div className="relative w-full">
-          <img src="/DanHoldingBookKitchen.png" alt="Dan holding the book in the kitchen" className="block w-full h-auto" />
+        <div className="relative w-full min-h-[420px] sm:min-h-[480px] lg:min-h-[620px]">
+          <img
+            src="/DanHoldingBookKitchen.png"
+            alt="Dan holding the book in the kitchen"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ objectPosition: "center 35%" }}
+          />
           <div className="absolute inset-0 z-10">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-24">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center py-14 sm:py-16 lg:py-24">
               <div className="max-w-2xl text-center lg:text-left">
                 <div className="inline-block rounded-xl bg-black/55 backdrop-blur-sm p-6 sm:p-8 shadow-lg mx-auto lg:mx-0">
                   <h1 className="text-3xl sm:text-4xl md:text-5xl leading-tight font-extrabold tracking-tight text-white">Not Just Recipes. A Journey.</h1>
