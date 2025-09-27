@@ -11,6 +11,9 @@ async function createCheckoutSession(req) {
     const { default: Stripe } = await import('stripe')
     const secretKey = process.env.STRIPE_SECRET_KEY
     const priceId = process.env.STRIPE_PRICE_ID_BOOK
+    const productId = process.env.STRIPE_PRODUCT_ID_BOOK || null
+    const defaultAmount = Number(process.env.BOOK_PRICE_AMOUNT_CENTS || '2999') || 2999
+    const defaultCurrency = (process.env.BOOK_PRICE_CURRENCY || 'usd').toLowerCase()
     const shippingRateFixed = process.env.STRIPE_SHIPPING_RATE_ID || null
 
     if (!secretKey) {
@@ -37,18 +40,36 @@ async function createCheckoutSession(req) {
     // Allow server to use a specific recurring price or create an ad-hoc price
     const stripe = new Stripe(secretKey)
 
-    const lineItems = priceId
-      ? [{ price: priceId, quantity: 1 }]
-      : [
-          {
-            price_data: {
-              currency: 'usd',
-              product_data: { name: 'Sixth Sense Cooking (Hardcover)' },
-              unit_amount: 2999,
-            },
-            quantity: 1,
+    let lineItems
+    if (priceId && priceId.startsWith('price_')) {
+      lineItems = [{ price: priceId, quantity: 1 }]
+    } else if (priceId && priceId.startsWith('prod_')) {
+      // If a product ID was mistakenly supplied, create a one-off price for it
+      const price = await stripe.prices.create({
+        currency: defaultCurrency,
+        unit_amount: defaultAmount,
+        product: priceId,
+      })
+      lineItems = [{ price: price.id, quantity: 1 }]
+    } else if (productId) {
+      const price = await stripe.prices.create({
+        currency: defaultCurrency,
+        unit_amount: defaultAmount,
+        product: productId,
+      })
+      lineItems = [{ price: price.id, quantity: 1 }]
+    } else {
+      lineItems = [
+        {
+          price_data: {
+            currency: defaultCurrency,
+            product_data: { name: 'Sixth Sense Cooking (Hardcover)' },
+            unit_amount: defaultAmount,
           },
-        ]
+          quantity: 1,
+        },
+      ]
+    }
 
     const params = {
       mode: 'payment',
