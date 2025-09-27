@@ -7,7 +7,6 @@ export async function GET() {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://nanobanana-ai.dev"
   const urls = [
     url(`${base}/`, "1.0"),
-    url(`${base}/pricing`, "0.9"),
     url(`${base}/docs`, "0.7"),
     url(`${base}/privacy`, "0.4"),
     url(`${base}/terms`, "0.4"),

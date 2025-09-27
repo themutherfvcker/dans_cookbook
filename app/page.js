@@ -24,7 +24,6 @@ export default function HomePage() {
               <a href="#recipes" className="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium">Recipes</a>
               <a href="#author" className="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium">Author</a>
               <a href="#testimonials" className="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium">Testimonials</a>
-              <a href="/pricing" className="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium">Pricing</a>
               <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium">Buy Now</a>
             </div>
             <div className="-mr-2 flex items-center md:hidden">
@@ -43,7 +42,6 @@ export default function HomePage() {
             <a href="#recipes" className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Recipes</a>
             <a href="#author" className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Author</a>
             <a href="#testimonials" className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Testimonials</a>
-            <a href="/pricing" className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Pricing</a>
             <a href="#purchase" className="block px-3 py-2 text-base font-medium text-white bg-red-600 hover:bg-red-700">Buy Now</a>
           </div>
         </div>
@@ -58,7 +56,25 @@ export default function HomePage() {
               <p className="mt-5 text-xl md:text-2xl text-gray-700 max-w-2xl">Unlock your culinary intuition with Daniel Webb's revolutionary approach to cooking</p>
               <p className="mt-3 text-base md:text-lg text-gray-600 max-w-2xl">A cookbook that blends flavor, music, and creativity to take your cooking to the next level.</p>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300 w-full sm:w-auto text-center">Buy the Book - $29.99</a>
+                <button
+                  onClick={async () => {
+                    try {
+                      const resp = await fetch('/api/session', { method: 'GET' })
+                      await resp.json().catch(() => ({}))
+                    } catch {}
+                    try {
+                      const r = await fetch('/api/checkout/book', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
+                      const j = await r.json()
+                      if (!r.ok || !j?.url) throw new Error(j?.error || `HTTP ${r.status}`)
+                      window.location.href = j.url
+                    } catch (e) {
+                      alert(`Checkout failed: ${e?.message || e}`)
+                    }
+                  }}
+                  className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300 w-full sm:w-auto text-center"
+                >
+                  Buy the Book - $29.99
+                </button>
               </div>
             </div>
             <div className="order-1 lg:order-2" data-aos="fade-left">
@@ -282,8 +298,24 @@ export default function HomePage() {
                   <li className="flex items-center"><i data-feather="check" className="h-5 w-5 text-green-300" /><span className="ml-3">Bonus online video content</span></li>
                 </ul>
                 <div className="mt-8">
-                  <button className="w-full flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-red-700 bg-white hover:bg-gray-100 md:py-4 md:text-lg md:px-10 transition duration-300">
-                    Add to Cart
+                  <button
+                    onClick={async () => {
+                      try {
+                        const resp = await fetch('/api/session', { method: 'GET' })
+                        await resp.json().catch(() => ({}))
+                      } catch {}
+                      try {
+                        const r = await fetch('/api/checkout/book', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
+                        const j = await r.json()
+                        if (!r.ok || !j?.url) throw new Error(j?.error || `HTTP ${r.status}`)
+                        window.location.href = j.url
+                      } catch (e) {
+                        alert(`Checkout failed: ${e?.message || e}`)
+                      }
+                    }}
+                    className="w-full flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-red-700 bg-white hover:bg-gray-100 md:py-4 md:text-lg md:px-10 transition duration-300"
+                  >
+                    Buy Now
                     <i data-feather="shopping-cart" className="ml-2" />
                   </button>
                 </div>
@@ -397,7 +429,7 @@ export default function HomePage() {
                 <div className="mt-12 md:mt-0">
                   <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">Quick Links</h3>
                   <ul className="mt-4 space-y-4">
-                    <li><a href="/pricing" className="text-base text-gray-300 hover:text-white">Pricing</a></li>
+                    
                   </ul>
                 </div>
               </div>
