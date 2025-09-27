@@ -32,7 +32,11 @@ export default function HomePage() {
                     const j = await r.json()
                     if (!r.ok || !j?.url) throw new Error(j?.error || `HTTP ${r.status}`)
                     window.location.href = j.url
-                  } catch (e) { alert(`Checkout failed: ${e?.message || e}`) }
+                  } catch (e) {
+                    const link = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_URL || ''
+                    if (link) { window.location.href = link; return }
+                    alert(`Checkout failed: ${e?.message || e}`)
+                  }
                 }}
                 className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium"
               >
@@ -63,7 +67,11 @@ export default function HomePage() {
                   const j = await r.json()
                   if (!r.ok || !j?.url) throw new Error(j?.error || `HTTP ${r.status}`)
                   window.location.href = j.url
-                } catch (e) { alert(`Checkout failed: ${e?.message || e}`) }
+                } catch (e) {
+                  const link = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_URL || ''
+                  if (link) { window.location.href = link; return }
+                  alert(`Checkout failed: ${e?.message || e}`)
+                }
               }}
               className="block w-full text-left px-3 py-2 text-base font-medium text-white bg-red-600 hover:bg-red-700"
             >
@@ -94,6 +102,8 @@ export default function HomePage() {
                       if (!r.ok || !j?.url) throw new Error(j?.error || `HTTP ${r.status}`)
                       window.location.href = j.url
                     } catch (e) {
+                      const link = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_URL || ''
+                      if (link) { window.location.href = link; return }
                       alert(`Checkout failed: ${e?.message || e}`)
                     }
                   }}
@@ -349,6 +359,8 @@ export default function HomePage() {
                         if (!r.ok || !j?.url) throw new Error(j?.error || `HTTP ${r.status}`)
                         window.location.href = j.url
                       } catch (e) {
+                        const link = process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK_URL || ''
+                        if (link) { window.location.href = link; return }
                         alert(`Checkout failed: ${e?.message || e}`)
                       }
                     }}
