@@ -281,10 +281,10 @@ export default function HomePage() {
                   <li className="flex items-center"><i data-feather="check" className="h-5 w-5 text-green-300" /><span className="ml-3">Bonus online video content</span></li>
                 </ul>
                 <div className="mt-8">
-                  <button className="w-full flex items-center justify-center px-8 py-4 text-lg font-medium rounded-md bg-red-600 text-white hover:bg-red-700 md:py-4 md:text-lg md:px-10 transition duration-300 shadow">
-                    Add to Cart
+                  <a href={buyHref} className="w-full inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 md:py-4 md:text-lg md:px-10 transition duration-300 shadow">
+                    Buy Now
                     <i data-feather="shopping-cart" className="ml-2" />
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
