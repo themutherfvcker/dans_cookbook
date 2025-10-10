@@ -269,10 +269,10 @@ export default function HomePage() {
             <div className="mt-10 lg:mt-0 text-white" data-aos="fade-left">
               <h2 className="text-3xl font-extrabold">Get Your Copy Today</h2>
               <p className="mt-4 text-xl">Transform your cooking with Daniel Webb's revolutionary approach</p>
-              <div className="mt-8 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm rounded-lg p-6">
+              <div className="mt-8 rounded-2xl p-6 bg-black/60 backdrop-blur-md ring-1 ring-white/20 shadow-xl">
                 <div className="flex items-baseline">
                   <span className="text-5xl font-extrabold">$54.99</span>
-                  <span className="ml-2 text-lg font-medium text-red-200">+ shipping</span>
+                  <span className="ml-2 text-lg font-medium text-white/80">+ shipping</span>
                 </div>
                 <ul className="mt-6 space-y-4">
                   <li className="flex items-center"><i data-feather="check" className="h-5 w-5 text-green-300" /><span className="ml-3">Hardcover, 320 pages</span></li>
@@ -281,7 +281,7 @@ export default function HomePage() {
                   <li className="flex items-center"><i data-feather="check" className="h-5 w-5 text-green-300" /><span className="ml-3">Bonus online video content</span></li>
                 </ul>
                 <div className="mt-8">
-                  <button className="w-full flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-red-700 bg-white hover:bg-gray-100 md:py-4 md:text-lg md:px-10 transition duration-300">
+                  <button className="w-full flex items-center justify-center px-8 py-4 text-lg font-medium rounded-md bg-red-600 text-white hover:bg-red-700 md:py-4 md:text-lg md:px-10 transition duration-300 shadow">
                     Add to Cart
                     <i data-feather="shopping-cart" className="ml-2" />
                   </button>
