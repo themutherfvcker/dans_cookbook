@@ -4,6 +4,7 @@ import { useState } from "react";
 
 export default function HomePage() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const buyHref = process.env.NEXT_PUBLIC_BOOK_CHECKOUT_URL || "#purchase";
 
   return (
     <>
@@ -56,7 +57,7 @@ export default function HomePage() {
               <p className="mt-5 text-xl md:text-2xl text-gray-700 max-w-2xl">Unlock your culinary intuition with Daniel Webb's revolutionary approach to cooking</p>
               <p className="mt-3 text-base md:text-lg text-gray-600 max-w-2xl">A cookbook that blends flavor, music, and creativity to take your cooking to the next level.</p>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300 w-full sm:w-auto text-center">Buy the Book - $54.99</a>
+                <a href={buyHref} className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300 w-full sm:w-auto text-center">Buy the Book - $54.99</a>
               </div>
             </div>
             <div className="order-1 lg:order-2" data-aos="fade-left">
@@ -124,7 +125,7 @@ export default function HomePage() {
                   </li>
                 </ul>
                 <div className="mt-8">
-                  <a href="#purchase" className="inline-block w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md text-base font-semibold transition duration-300">Buy the Book - $54.99</a>
+                  <a href={buyHref} className="inline-block w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md text-base font-semibold transition duration-300">Buy the Book - $54.99</a>
                 </div>
               </div>
             </div>
