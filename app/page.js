@@ -56,7 +56,7 @@ export default function HomePage() {
               <p className="mt-5 text-xl md:text-2xl text-gray-700 max-w-2xl">Unlock your culinary intuition with Daniel Webb's revolutionary approach to cooking</p>
               <p className="mt-3 text-base md:text-lg text-gray-600 max-w-2xl">A cookbook that blends flavor, music, and creativity to take your cooking to the next level.</p>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300 w-full sm:w-auto text-center">Buy the Book - $29.99</a>
+                <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300 w-full sm:w-auto text-center">Buy the Book - $54.99</a>
               </div>
             </div>
             <div className="order-1 lg:order-2" data-aos="fade-left">
@@ -124,7 +124,7 @@ export default function HomePage() {
                   </li>
                 </ul>
                 <div className="mt-8">
-                  <a href="#purchase" className="inline-block w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md text-base font-semibold transition duration-300">Buy the Book - $29.99</a>
+                  <a href="#purchase" className="inline-block w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md text-base font-semibold transition duration-300">Buy the Book - $54.99</a>
                 </div>
               </div>
             </div>
@@ -270,7 +270,7 @@ export default function HomePage() {
               <p className="mt-4 text-xl">Transform your cooking with Daniel Webb's revolutionary approach</p>
               <div className="mt-8 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm rounded-lg p-6">
                 <div className="flex items-baseline">
-                  <span className="text-5xl font-extrabold">$29.99</span>
+                  <span className="text-5xl font-extrabold">$54.99</span>
                   <span className="ml-2 text-lg font-medium text-red-200">+ shipping</span>
                 </div>
                 <ul className="mt-6 space-y-4">
