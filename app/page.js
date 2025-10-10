@@ -4,7 +4,7 @@ import { useState } from "react";
 
 export default function HomePage() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const buyHref = process.env.NEXT_PUBLIC_BOOK_CHECKOUT_URL || "https://buy.stripe.com/9B6dRadqZelT6vjcbGdQQ00";
+  const buyHref = "https://buy.stripe.com/9B6dRadqZelT6vjcbGdQQ00";
 
   return (
     <>
