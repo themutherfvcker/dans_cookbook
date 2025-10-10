@@ -4,6 +4,7 @@ import { useState } from "react";
 
 export default function HomePage() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const buyHref = "https://buy.stripe.com/9B6dRadqZelT6vjcbGdQQ00";
 
   return (
     <>
@@ -24,7 +25,7 @@ export default function HomePage() {
               <a href="#recipes" className="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium">Recipes</a>
               <a href="#author" className="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium">Author</a>
               <a href="#testimonials" className="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium">Testimonials</a>
-              <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium">Buy Now</a>
+              <a href={buyHref} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium">Buy Now</a>
             </div>
             <div className="-mr-2 flex items-center md:hidden">
               <button type="button" onClick={() => setMobileOpen(!mobileOpen)} className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500" aria-controls="mobile-menu" aria-expanded={mobileOpen} id="mobile-menu-button">
@@ -42,7 +43,7 @@ export default function HomePage() {
             <a href="#recipes" className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Recipes</a>
             <a href="#author" className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Author</a>
             <a href="#testimonials" className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Testimonials</a>
-            <a href="#purchase" className="block px-3 py-2 text-base font-medium text-white bg-red-600 hover:bg-red-700">Buy Now</a>
+            <a href={buyHref} className="block px-3 py-2 text-base font-medium text-white bg-red-600 hover:bg-red-700">Buy Now</a>
           </div>
         </div>
       </nav>
@@ -56,7 +57,7 @@ export default function HomePage() {
               <p className="mt-5 text-xl md:text-2xl text-gray-700 max-w-2xl">Unlock your culinary intuition with Daniel Webb's revolutionary approach to cooking</p>
               <p className="mt-3 text-base md:text-lg text-gray-600 max-w-2xl">A cookbook that blends flavor, music, and creativity to take your cooking to the next level.</p>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <a href="#purchase" className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300 w-full sm:w-auto text-center">Buy the Book - $29.99</a>
+                <a href={buyHref} className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-md text-lg font-semibold transition duration-300 w-full sm:w-auto text-center">Buy the Book - $54.99</a>
               </div>
             </div>
             <div className="order-1 lg:order-2" data-aos="fade-left">
@@ -124,7 +125,7 @@ export default function HomePage() {
                   </li>
                 </ul>
                 <div className="mt-8">
-                  <a href="#purchase" className="inline-block w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md text-base font-semibold transition duration-300">Buy the Book - $29.99</a>
+                  <a href={buyHref} className="inline-block w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md text-base font-semibold transition duration-300">Buy the Book - $54.99</a>
                 </div>
               </div>
             </div>
@@ -268,10 +269,10 @@ export default function HomePage() {
             <div className="mt-10 lg:mt-0 text-white" data-aos="fade-left">
               <h2 className="text-3xl font-extrabold">Get Your Copy Today</h2>
               <p className="mt-4 text-xl">Transform your cooking with Daniel Webb's revolutionary approach</p>
-              <div className="mt-8 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm rounded-lg p-6">
+              <div className="mt-8 rounded-2xl p-6 bg-black/60 backdrop-blur-md ring-1 ring-white/20 shadow-xl">
                 <div className="flex items-baseline">
-                  <span className="text-5xl font-extrabold">$29.99</span>
-                  <span className="ml-2 text-lg font-medium text-red-200">+ shipping</span>
+                  <span className="text-5xl font-extrabold">$54.99</span>
+                  <span className="ml-2 text-lg font-medium text-white/80">+ shipping</span>
                 </div>
                 <ul className="mt-6 space-y-4">
                   <li className="flex items-center"><i data-feather="check" className="h-5 w-5 text-green-300" /><span className="ml-3">Hardcover, 320 pages</span></li>
@@ -280,10 +281,10 @@ export default function HomePage() {
                   <li className="flex items-center"><i data-feather="check" className="h-5 w-5 text-green-300" /><span className="ml-3">Bonus online video content</span></li>
                 </ul>
                 <div className="mt-8">
-                  <button className="w-full flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-md text-red-700 bg-white hover:bg-gray-100 md:py-4 md:text-lg md:px-10 transition duration-300">
-                    Add to Cart
+                  <a href={buyHref} className="w-full inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 md:py-4 md:text-lg md:px-10 transition duration-300 shadow">
+                    Buy Now
                     <i data-feather="shopping-cart" className="ml-2" />
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
